@@ -1,0 +1,28 @@
+{
+    "name": "bradietilley/pest-printer",
+    "description": "A PestPHP printer",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "pestphp/pest": "^1.22",
+        "nunomaduro/termwind": "^1.13",
+        "illuminate/support": "^9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "BradieTilley\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Bradie Tilley",
+            "homepage": "https://github.com/bradietilley"
+        }
+    ],
+    "minimum-stability": "dev",
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
+}
