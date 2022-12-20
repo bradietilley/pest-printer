@@ -84,23 +84,13 @@ class Group
     public function start(): void
     {
         $this->running = true;
-        
-        $count = $this->count();
 
-        $box = sprintf(
-            '%d %s',
-            $count,
-            Str::plural('test', $count),
-        );
         $title = $this->getName();
 
         Renderer::render(<<<HTML
             <div class="pl-2 py-1">
-                <div class="w-12 text-right">
-                    <div class="px-1">{$box}</div>
-                </div>
-                <em class="ml-1">
-                    {$title}
+                <em class="bg-gray-800">
+                    &nbsp;{$title}&nbsp;
                 </em>
             </div>
         HTML);
