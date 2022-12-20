@@ -75,15 +75,30 @@ enum Status: string
         };
     }
 
+    public function textPast(): string
+    {
+        return match ($this) {
+            self::SUCCESS => 'Passed',
+            self::FAILED => 'Failed',
+            self::ERROR => 'Errored',
+            self::PENDING => 'Pending',
+            self::WARNING => 'Warned',
+            self::SKIPPED => 'Skipped',
+            self::INCOMPLETE => 'Incompleted',
+            self::RISKY => 'Risky',
+            self::UNKNOWN => 'Unknown',
+        };
+    }
+
     public function text(): string
     {
         return match ($this) {
-            self::SUCCESS => 'Success',
-            self::FAILED => 'Failed',
+            self::SUCCESS => 'Pass',
+            self::FAILED => 'Failure',
             self::ERROR => 'Error',
             self::PENDING => 'Pending',
             self::WARNING => 'Warning',
-            self::SKIPPED => 'Skipped',
+            self::SKIPPED => 'Skip',
             self::INCOMPLETE => 'Incomplete',
             self::RISKY => 'Risky',
             self::UNKNOWN => 'Unknown',
@@ -106,8 +121,8 @@ enum Status: string
     }
 
     /**
-     * @param array<Status> $statuses 
-     * @return Status 
+     * @param array<Status> $statuses
+     * @return Status
      */
     public static function getLowestDemoninator(array $statuses): self
     {

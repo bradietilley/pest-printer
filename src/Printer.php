@@ -58,7 +58,7 @@ class Printer implements \PHPUnit\TextUI\ResultPrinter
                 $text = sprintf(
                     '%d %s',
                     $data['count'],
-                    $data['status']->text(),
+                    $data['status']->textPast(),
                 );
 
                 $statusCss = $data['status']->css();
@@ -238,14 +238,14 @@ class Printer implements \PHPUnit\TextUI\ResultPrinter
     }
 
     /**
-     * @param \PHPUnit\Framework\TestCase $test 
+     * @param \PHPUnit\Framework\TestCase $test
      */
     public function startTest(Test $test): void
     {
         try {
             $this->single = $this->makeSingle($test);
             $this->single->start();
-            
+
             $this->group->addTest($this->single);
         } catch (\Throwable $e) {
             dd($e);
@@ -253,7 +253,7 @@ class Printer implements \PHPUnit\TextUI\ResultPrinter
     }
 
     /**
-     * @param \PHPUnit\Framework\TestCase $test 
+     * @param \PHPUnit\Framework\TestCase $test
      */
     public function endTest(Test $test, float $time): void
     {

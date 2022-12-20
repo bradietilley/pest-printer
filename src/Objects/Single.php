@@ -39,7 +39,7 @@ class Single
     {
         return new self($test, $group);
     }
-    
+
     public function hasRun(): bool
     {
         return $this->test->getTestResultObject() !== null;
@@ -98,14 +98,14 @@ class Single
             'status' => 2,
             'time' => 7,
         ];
-        
+
         $otherWidth = $widths['left']
             + $widths['index']
             + $widths['right']
             + ($widths['padding'] * 3)
             + $widths['status']
             + $widths['time'];
-        
+
         $fullWidth = terminal()->width();
         $nameWidth = $fullWidth - $otherWidth;
 
@@ -169,7 +169,7 @@ class Single
 
         /**
          * Using the number of expected rows from the $text array,
-         * push the status icon to the last row 
+         * push the status icon to the last row
          */
         $status = [
             $statusIcon,
@@ -183,7 +183,7 @@ class Single
 
         /**
          * Using the number of expected rows from the $text array,
-         * push the time text to the last row 
+         * push the time text to the last row
          */
         $time = [
             $timeText,
@@ -197,7 +197,7 @@ class Single
 
         /**
          * Using the number of expected rows from the $text array,
-         * push the index text to the last row 
+         * push the index text to the last row
          */
         $index = [
             $indexText,
@@ -233,7 +233,7 @@ class Single
                     <span class="w-{$widths['status']} {$statusCss}">
                         {$status[$row]}
                     </span>
-                    
+
                     <span class="w-{$nameWidth} max-w-{$nameWidth} truncate">
                         <div class="flex">
                             <div class="w-auto">{$text[$row]}</div>
@@ -286,24 +286,28 @@ class Single
         return $this->status->group() !== Status::SUCCESS;
     }
 
-    public function renderAdditionalInformation(int $errorNumber): void
+    public function renderAdditionalInformation(array &$issues): void
     {
+        $issues[$this->status->value] ??= 0;
+        $issueNumber = ++$issues[$this->status->value];
+
+        $issueTerm = $this->status->text();
         $statusCss = $this->status->css();
         $inverseStatusCss = $this->status->inverseCss();
-        
+
         Printer::delimiter();
 
 
         Renderer::render(<<<HTML
             <div class="pt-1 px-2">
-                <div class="{$inverseStatusCss} px-1">Failure #{$errorNumber}</div>
+                <div class="{$inverseStatusCss} px-1">{$issueTerm} #{$issueNumber}</div>
             </div>
         HTML);
 
         $file = $this->group->getName();
         $name = $this->getName();
         $dataset = $this->getDataset();
-        $datasetclass = $this->name->hasDataset() ? '' : 'hidden'; 
+        $datasetclass = $this->name->hasDataset() ? '' : 'hidden';
 
         Renderer::render(<<<HTML
         <div class="pl-2 pt-1">
@@ -314,7 +318,7 @@ class Single
             </div>
         </div>
         HTML);
-        
+
         $exception = null;
         if ($this->hasException() && $this->shouldShowExceptionPreview()) {
             $exception = ExceptionPreview::make($this->error);
@@ -324,7 +328,7 @@ class Single
 
 
         $statusMessage = trim($this->test->getStatusMessage());
-        
+
         if ($statusMessage !== '') {
             Renderer::raw("\n  {$statusMessage}\n");
         }

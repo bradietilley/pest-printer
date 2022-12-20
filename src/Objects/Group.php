@@ -120,9 +120,11 @@ class Group
 
     public function printAdditionalInformation(): void
     {
+        $issues = [];
+
         foreach ($this->tests as $test) {
             if ($test->showAdditionalInformation()) {
-                $test->renderAdditionalInformation(++static::$errors);
+                $test->renderAdditionalInformation($issues);
             }
         }
     }
