@@ -3,6 +3,7 @@
 namespace BradieTilley\Objects;
 
 use AssertionError;
+use BradieTilley\PestPrinterConfig;
 use BradieTilley\Printer;
 use BradieTilley\Renderer;
 use PHPUnit\Framework\AssertionFailedError;
@@ -87,8 +88,10 @@ class Single
         $timeCss = $this->time->css();
         $name = $this->getName();
 
-        $indexCss = 'text-zinc-600';
         $indexText = "[{$this->suiteIndex}/{$this->suiteMax}]";
+        $indexCss = PestPrinterConfig::color('text-zinc-600');
+        $cyan = PestPrinterConfig::color('text-cyan-600');
+        $gray = PestPrinterConfig::color('text-gray-600');
 
         $widths = [
             'left' => 2,
@@ -135,8 +138,8 @@ class Single
 
             foreach ($dataset as $datasetpart) {
                 $text[] = <<<HTML
-                    <span class="text-cyan-600 mr-{$spacing}">{$indent}</span>
-                    <span class="text-cyan-600">{$datasetpart}</span>
+                    <span class="{$cyan} mr-{$spacing}">{$indent}</span>
+                    <span class="{$cyan}">{$datasetpart}</span>
                 HTML;
             }
         }
@@ -191,7 +194,7 @@ class Single
         $symbol = '↲';
         while (count($time) < count($text)) {
             $time[] = <<<HTML
-            <div class="text-gray-600">{$symbol}</div>
+            <div class="{$gray}">{$symbol}</div>
             HTML;
         }
 
@@ -205,7 +208,7 @@ class Single
         $symbol = '';
         while (count($index) < count($text)) {
             $index[] = <<<HTML
-            <div class="text-gray-600">{$symbol}</div>
+            <div class="{$gray}">{$symbol}</div>
             HTML;
         }
 
@@ -216,7 +219,7 @@ class Single
         //         $dots = str_repeat('.', $diff);
 
         //         $textRow .= <<<HTML
-        //             <span class="text-gray-600">{$dots}</span>
+        //             <span class="{$gray}">{$dots}</span>
         //         HTML;
         //     }
 
@@ -237,7 +240,7 @@ class Single
                     <span class="w-{$nameWidth} max-w-{$nameWidth} truncate">
                         <div class="flex">
                             <div class="w-auto">{$text[$row]}</div>
-                            <span class="w-auto pl-1 text-gray-600 content-repeat-['.']"></span>
+                            <span class="w-auto pl-1 {$gray} content-repeat-['.']"></span>
                         </div>
                     </span>
 
@@ -365,12 +368,6 @@ class Single
         if ($this->error === null) {
             return false;
         }
-
-        $instances = [
-            Warning::class,
-            AssertionError::class,
-            AssertionFailedError::class,
-        ];
 
         if (
             ($this->error instanceof Warning) ||

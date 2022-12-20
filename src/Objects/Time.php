@@ -2,6 +2,8 @@
 
 namespace BradieTilley\Objects;
 
+use BradieTilley\PestPrinterConfig;
+
 class Time
 {
     public const FAST = 0.2;
@@ -14,22 +16,28 @@ class Time
 
     public function css(): string
     {
-        return match (true) {
-            is_null($this->time) => 'text-gray-500',
-            $this->time <= self::FAST => 'text-green-500',
-            $this->time <= self::OKAY => 'text-amber-500',
-            $this->time <= self::SLOW => 'text-red-500',
-        };
+        return PestPrinterConfig::color(
+            match (true) {
+                is_null($this->time) => 'text-gray-500',
+                $this->time <= self::FAST => 'text-green-500',
+                $this->time <= self::OKAY => 'text-amber-500',
+                $this->time <= self::SLOW => 'text-red-500',
+                default => 'text-gray-500',
+            },
+        );
     }
 
     public function inverseCss(): string
     {
-        return match (true) {
-            is_null($this->time) => 'bg-gray-800 text-white',
-            $this->time <= self::FAST => 'bg-green-800 text-white',
-            $this->time <= self::OKAY => 'bg-amber-800 text-white',
-            $this->time <= self::SLOW => 'bg-red-800 text-white',
-        };
+        return PestPrinterConfig::color(
+            match (true) {
+                is_null($this->time) => 'bg-gray-800 text-white',
+                $this->time <= self::FAST => 'bg-green-800 text-white',
+                $this->time <= self::OKAY => 'bg-amber-800 text-white',
+                $this->time <= self::SLOW => 'bg-red-800 text-white',
+                default => 'bg-gray-800 text-white',
+            },
+        );
     }
 
     public function format(): string

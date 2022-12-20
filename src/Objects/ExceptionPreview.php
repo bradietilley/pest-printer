@@ -2,6 +2,7 @@
 
 namespace BradieTilley\Objects;
 
+use BradieTilley\PestPrinterConfig;
 use BradieTilley\Renderer;
 use PHPUnit\Framework\ExceptionWrapper;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -127,25 +128,27 @@ class ExceptionPreview
         $class = $this->getFriendlyClassName();
 
         $typeClass = $type ? 'flex' : 'hidden';
+        $cyan = PestPrinterConfig::color('text-cyan-400');
+        $gray = PestPrinterConfig::color('text-gray-700');
 
         $html = <<<HTML
         <div class="pl-{$indent}">
             <div class="{$typeClass}">
-                <span class="px-1 bg-gray-700">Type:</span>
+                <span class="px-1 {$gray}">Type:</span>
                 <span class="ml-1">{$class}</span>
             </div>
 
             <div class="flex">
-                <span class="px-1 bg-gray-700">File:</span>
+                <span class="px-1 {$gray}">File:</span>
                 <span class="ml-1">{$this->exception->getFile()}</span>
             </div>
 
             <div class="flex mb-1">
-                <span class="px-1 bg-gray-700">Line:</span>
+                <span class="px-1 {$gray}">Line:</span>
                 <span class="ml-1">{$this->exception->getLine()}</span>
             </div>
 
-            <code line="{$line}" start-line="{$firstLine}" class="text-cyan-400">
+            <code line="{$line}" start-line="{$firstLine}" class="{$cyan}">
             {$lines}
             </code>
         </div>

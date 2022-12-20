@@ -2,6 +2,7 @@
 
 namespace BradieTilley\Objects;
 
+use BradieTilley\PestPrinterConfig;
 use BradieTilley\Renderer;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\TestSuite;
@@ -86,10 +87,11 @@ class Group
         $this->running = true;
 
         $title = $this->getName();
+        $gray = PestPrinterConfig::color('bg-gray-800');
 
         Renderer::render(<<<HTML
             <div class="pl-2 py-1">
-                <em class="bg-gray-800">
+                <em class="{$gray}">
                     &nbsp;{$title}&nbsp;
                 </em>
             </div>

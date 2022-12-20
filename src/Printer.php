@@ -15,11 +15,8 @@ use PHPUnit\Framework\TestResult;
 use PHPUnit\Framework\TestSuite;
 use PHPUnit\Framework\Warning;
 use ReflectionClass;
-use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
-use Termwind\Termwind;
 use Throwable;
-use function Termwind\{render};
 
 class Printer implements \PHPUnit\TextUI\ResultPrinter
 {
@@ -266,8 +263,10 @@ class Printer implements \PHPUnit\TextUI\ResultPrinter
 
     public static function delimiter(): void
     {
+        $class = PestPrinterConfig::color('text-zinc-700');
+
         Renderer::render(<<<HTML
-            <div class="mt-1 text-zinc-700 content-repeat-['-']"></div>
+            <div class="mt-1 {$class} content-repeat-['-']"></div>
         HTML);
     }
 }

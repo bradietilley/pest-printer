@@ -2,6 +2,8 @@
 
 namespace BradieTilley\Objects;
 
+use BradieTilley\PestPrinterConfig;
+
 enum Status: string
 {
     case PENDING = 'pending';
@@ -46,33 +48,17 @@ enum Status: string
 
     public function css(): string
     {
-        return sprintf(
-            'text-%s',
-            $this->color(),
-        );
+        return PestPrinterConfig::color("text-{$this->color()}");
     }
 
     public function inverseCss(): string
     {
-        return sprintf(
-            'bg-%s-700 text-white',
-            $this->color(),
-        );
+        return PestPrinterConfig::color("bg-{$this->color()}-700") . ' text-white';
     }
 
     public function color(): string
     {
-        return match ($this) {
-            self::PENDING => 'gray',
-            self::SUCCESS => 'green',
-            self::FAILED => 'red',
-            self::WARNING => 'yellow',
-            self::ERROR => 'red',
-            self::SKIPPED => 'yellow',
-            self::INCOMPLETE => 'yellow',
-            self::RISKY => 'yellow',
-            self::UNKNOWN => 'gray',
-        };
+        return PestPrinterConfig::statusColor($this->value, 'grey');
     }
 
     public function textPast(): string
