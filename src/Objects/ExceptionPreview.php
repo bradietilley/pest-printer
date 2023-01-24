@@ -2,6 +2,7 @@
 
 namespace BradieTilley\PestPrinter\Objects;
 
+use BradieTilley\PestPrinter\Config;
 use BradieTilley\PestPrinter\PestPrinterConfig;
 use BradieTilley\PestPrinter\Renderer;
 use PHPUnit\Framework\ExceptionWrapper;
@@ -128,7 +129,6 @@ class ExceptionPreview
         $class = $this->getFriendlyClassName();
 
         $typeClass = $type ? 'flex' : 'hidden';
-        $cyan = PestPrinterConfig::color('text-cyan-400');
         $gray = PestPrinterConfig::color('text-gray-700');
 
         $html = <<<HTML
@@ -148,7 +148,7 @@ class ExceptionPreview
                 <span class="ml-1">{$this->exception->getLine()}</span>
             </div>
 
-            <code line="{$line}" start-line="{$firstLine}" class="{$cyan}">
+            <code line="{$line}" start-line="{$firstLine}">
             {$lines}
             </code>
         </div>

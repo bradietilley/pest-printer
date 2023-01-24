@@ -2,6 +2,7 @@
 
 namespace BradieTilley\PestPrinter;
 
+use BradieTilley\PestPrinter\Objects\Status;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config as Setting;
 use Throwable;
@@ -32,6 +33,16 @@ class Config
         } catch (Throwable $error) {
             static::$config = require __DIR__.'/../config/config.php';
         }
+    }
+
+    public static function all(): array
+    {
+        // Read the configuration once
+        if (static::$config === null) {
+            static::read();
+        }
+
+        return static::$config;
     }
 
     public static function get(string $key, mixed $default = null): mixed
@@ -117,5 +128,57 @@ class Config
     public static function getFailedTestDelimiterClass(): string
     {
         return self::get('display.failedTestDelimiter.class', 'text-gray');
+    }
+
+    private static function statusKey(Status $status): string
+    {
+        return sprintf('statuses.%s', $status->value);
+    }
+
+    public static function getStatusIcon(Status $status): string
+    {
+        return self::get(self::statusKey($status) . '.icon');
+    }
+    
+    public static function getStatusTextPastTense(Status $status): string
+    {
+        return self::get(self::statusKey($status) . '.past');
+    }
+
+    public static function getStatusTextPresentTense(Status $status): string
+    {
+        return self::get(self::statusKey($status) . '.present');
+    }
+
+    public static function getStatusShowMessageInline(Status $status): bool
+    {
+        return self::get(self::statusKey($status) . '.showMessageInline');
+    }
+
+    public static function getStatusColor(Status $status): string
+    {
+        if (empty(self::get(self::statusKey($status) . '.color'))) {
+            dd($status);
+        }
+
+        return self::get(self::statusKey($status) . '.color');
+    }
+
+    public static function getStatusPrimaryCss(Status $status): string
+    {
+        return str_replace(
+            search: ':color',
+            replace: self::getStatusColor($status),
+            subject: self::get(self::statusKey($status) . '.primaryCss'),
+        );
+    }
+
+    public static function getStatusInverseCss(Status $status): string
+    {
+        return str_replace(
+            search: ':color',
+            replace: self::getStatusColor($status),
+            subject: self::get(self::statusKey($status) . '.inverseCss'),
+        );
     }
 }
