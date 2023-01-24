@@ -2,6 +2,7 @@
 
 namespace BradieTilley\PestPrinter;
 
+use BradieTilley\PestPrinter\Exceptions\InvalidConfigurationException;
 use BradieTilley\PestPrinter\Objects\Status;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config as Setting;
@@ -15,7 +16,7 @@ class Config
 
     public static function flush(): void
     {
-        static::$config = null;
+        self::$config = null;
     }
 
     public static function read(): void
@@ -29,133 +30,130 @@ class Config
              * To bypass this, we'll offer Laravel a chance and fallback
              * to the good ol' `require` approach. SSDD right?
              */
-            static::$config = Setting::get(self::CONFIG_KEY, []);
+            self::$config = (array) Setting::get(self::CONFIG_KEY, []);
         } catch (Throwable $error) {
-            static::$config = require __DIR__.'/../config/config.php';
+            self::$config = (array) require __DIR__.'/../config/config.php';
         }
     }
 
     public static function all(): array
     {
         // Read the configuration once
-        if (static::$config === null) {
+        if (self::$config === null) {
             static::read();
         }
 
-        return static::$config;
+        return (array) self::$config;
     }
 
     public static function get(string $key, mixed $default = null): mixed
     {
         // Read the configuration once
-        if (static::$config === null) {
+        if (self::$config === null) {
             static::read();
         }
 
-        return Arr::get(static::$config, $key, $default);
+        return Arr::get(self::all(), $key, $default);
     }
 
-    /**
-     * @return string
-     */
     public static function getDelimiterText(): string
     {
-        return self::get('display.delimiter.text', '-');
+        return self::getString('display.delimiter.text', '-');
     }
 
     public static function getDelimiterClass(): string
     {
-        return self::get('display.delimiter.class', 'text-zinc-700');
+        return self::getString('display.delimiter.class', 'text-zinc-700');
     }
 
     public static function getDatasetIndentText(): string
     {
-        return self::get('display.datasetIndentation.text', '>>>>');
+        return self::getString('display.datasetIndentation.text', '>>>>');
     }
 
     public static function getDatasetIndentSpacing(): int
     {
-        return self::get('display.datasetIndentation.spacing', 1);
+        return self::getInteger('display.datasetIndentation.spacing', 1);
     }
 
     public static function getDatasetIndentClass(): string
     {
-        return self::get('display.datasetIndentation.class', '');
+        return self::getString('display.datasetIndentation.class', '');
     }
 
     public static function getDatasetNameClass(): string
     {
-        return self::get('display.datasetName.class', '');
+        return self::getString('display.datasetName.class', '');
     }
 
     public static function getStatusMessageSpacing(): int
     {
-        return self::get('display.statusMessage.spacing', 1);
+        return self::getInteger('display.statusMessage.spacing', 1);
     }
 
     public static function getStatusMessageText(): string
     {
-        return self::get('display.statusMessage.text', '⟶  ');
+        return self::getString('display.statusMessage.text', '⟶  ');
     }
 
     public static function getRowPrefixText(): string
     {
-        return self::get('display.rowPrefix.text', '↳');
+        return self::getString('display.rowPrefix.text', '↳');
     }
 
     public static function getRowSuffixText(): string
     {
-        return self::get('display.rowSuffix.text', '↲');
+        return self::getString('display.rowSuffix.text', '↲');
     }
 
     public static function getRowSuffixClass(): string
     {
-        return self::get('display.rowSuffix.class', 'text-gray-600');
+        return self::getString('display.rowSuffix.class', 'text-gray-600');
     }
 
     public static function getTestIndexClass(): string
     {
-        return self::get('display.testIndex.class', 'text-zinc-600');
+        return self::getString('display.testIndex.class', 'text-zinc-600');
     }
 
     public static function getTestNameClass(): string
     {
-        return self::get('display.testName.class', 'bg-gray-700 text-white');
+        return self::getString('display.testName.class', 'bg-gray-700 text-white');
     }
 
     public static function getTestNameElipsisText(): string
     {
-        return self::get('display.testNameElipsis.text', '.');
+        return self::getString('display.testNameElipsis.text', '.');
     }
 
     public static function getTestNameElipsisClass(): string
     {
-        return self::get('display.testNameElipsis.class', 'text-gray-600');
+        return self::getString('display.testNameElipsis.class', 'text-gray-600');
     }
 
     public static function getFailedTestDelimiter1Text(): string
     {
-        return self::get('display.failedTestDelimiter1.text', '•');
+        return self::getString('display.failedTestDelimiter1.text', '•');
     }
 
     public static function getFailedTestDelimiter2Text(): string
     {
-        return self::get('display.failedTestDelimiter2.text', '»');
+        return self::getString('display.failedTestDelimiter2.text', '»');
     }
 
     public static function getFailedTestDelimiter3Text(): string
     {
-        return self::get('display.failedTestDelimiter3.text', '›');
+        return self::getString('display.failedTestDelimiter3.text', '›');
     }
 
     public static function getFailedTestDelimiterClass(): string
     {
-        return self::get('display.failedTestDelimiter.class', 'text-gray');
+        return self::getString('display.failedTestDelimiter.class', 'text-gray');
     }
 
     public static function getExceptionPreviewLabelClass(): string
     {
-        return self::Get('display.exceptionPreview.labels.class', 'text-gray-500');
+        return self::getString('display.exceptionPreview.labels.class', 'text-gray-500');
     }
 
     /**
@@ -170,32 +168,32 @@ class Config
 
     public static function getStatusIcon(Status $status): string
     {
-        return self::get(self::statusKey($status, 'icon'));
+        return self::getString(self::statusKey($status, 'icon'));
     }
 
     public static function getStatusTextPastTense(Status $status): string
     {
-        return self::get(self::statusKey($status, 'past'));
+        return self::getString(self::statusKey($status, 'past'));
     }
 
     public static function getStatusTextPresentTense(Status $status): string
     {
-        return self::get(self::statusKey($status, 'present'));
+        return self::getString(self::statusKey($status, 'present'));
     }
 
     public static function getStatusTextPluralTerm(Status $status): string
     {
-        return self::get(self::statusKey($status, 'plural'));
+        return self::getString(self::statusKey($status, 'plural'));
     }
 
     public static function getStatusShowMessageInline(Status $status): bool
     {
-        return self::get(self::statusKey($status, 'showMessageInline'));
+        return self::getBoolean(self::statusKey($status, 'showMessageInline'));
     }
 
     public static function getStatusColor(Status $status): string
     {
-        return self::get(self::statusKey($status, 'color'));
+        return self::getString(self::statusKey($status, 'color'));
     }
 
     public static function getStatusPrimaryCss(Status $status): string
@@ -203,7 +201,7 @@ class Config
         return str_replace(
             ':color',
             self::getStatusColor($status),
-            self::get(self::statusKey($status, 'primaryCss')),
+            self::getString(self::statusKey($status, 'primaryCss')),
         );
     }
 
@@ -212,42 +210,75 @@ class Config
         return str_replace(
             ':color',
             self::getStatusColor($status),
-            self::get(self::statusKey($status, 'inverseCss')),
+            self::getString(self::statusKey($status, 'inverseCss')),
         );
     }
 
     public static function getStatusShowAdditionalInformation(Status $status): bool
     {
-        return self::get(self::statusKey($status, 'showAdditionalInformation'));
+        return self::getBoolean(self::statusKey($status, 'showAdditionalInformation'));
     }
 
     public static function getWidthLeft(): int
     {
-        return self::get('display.widths.left', 2);
+        return self::getInteger('display.widths.left', 2);
     }
 
     public static function getWidthIndex(): int
     {
-        return self::get('display.widths.index', 9);
+        return self::getInteger('display.widths.index', 9);
     }
 
     public static function getWidthRight(): int
     {
-        return self::get('display.widths.right', 2);
+        return self::getInteger('display.widths.right', 2);
     }
 
     public static function getWidthPadding(): int
     {
-        return self::get('display.widths.padding', 1);
+        return self::getInteger('display.widths.padding', 1);
     }
 
     public static function getWidthStatus(): int
     {
-        return self::get('display.widths.status', 2);
+        return self::getInteger('display.widths.status', 2);
     }
 
     public static function getWidthTime(): int
     {
-        return self::get('display.widths.time', 7);
+        return self::getInteger('display.widths.time', 7);
+    }
+
+    private static function getString(string $key, string $default = ''): string
+    {
+        $value = self::get($key, $default);
+
+        if (! is_string($value)) {
+            throw InvalidConfigurationException::invalidString($key);
+        }
+
+        return $value;
+    }
+
+    private static function getBoolean(string $key, bool $default = false): bool
+    {
+        $value = self::get($key, $default);
+
+        if (! is_bool($value)) {
+            throw InvalidConfigurationException::invalidBoolean($key);
+        }
+
+        return $value;
+    }
+
+    private static function getInteger(string $key, int $default = 0): int
+    {
+        $value = self::get($key, $default);
+
+        if (! is_int($value)) {
+            throw InvalidConfigurationException::invalidInteger($key);
+        }
+
+        return $value;
     }
 }

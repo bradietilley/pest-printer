@@ -21,7 +21,7 @@ class ExceptionPreview
 
     public function readFile(): string
     {
-        return @file_get_contents($this->exception->getFile()) ?? '';
+        return @file_get_contents($this->exception->getFile()) ?: '';
     }
 
     public function extractLines(int $from, int $to, string $file): array
@@ -31,6 +31,11 @@ class ExceptionPreview
         }
 
         $handler = fopen($file, 'r');
+
+        if (! $handler) {
+            throw new \Exception('Failed to read file '.$file);
+        }
+
         $row = 0;
         $rows = [];
 
@@ -59,8 +64,9 @@ class ExceptionPreview
     public function findTraceThatIsNotPhpUnitOrPest(): ?array
     {
         foreach ($this->exception->getTrace() as $trace) {
+            /** @var array<string, mixed> $trace */
             $file = $trace['file'];
-
+            /** @var string $file */
             if (str_contains($file, '/vendor/phpunit/phpunit/') || str_contains($file, '/vendor/pestphp/pest/')) {
                 continue;
             }

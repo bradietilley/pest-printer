@@ -117,6 +117,7 @@ class Single
          * array (capped at the expected width of the name column)
          */
         $text = [];
+        assert($nameWidth > 0);
         foreach (mb_str_split($name, $nameWidth) as $line) {
             $text[] = <<<HTML
                 <div>{$line}</div>
@@ -136,7 +137,10 @@ class Single
 
             $restrictedWidth = strlen($indent) + $spacing;
 
-            $dataset = mb_str_split($this->getDataset(), $nameWidth - $restrictedWidth);
+            $nameMinusRestrictedWidth = $nameWidth - $restrictedWidth;
+
+            assert($nameMinusRestrictedWidth > 0);
+            $dataset = mb_str_split((string) $this->getDataset(), $nameMinusRestrictedWidth);
 
             foreach ($dataset as $datasetpart) {
                 $text[] = <<<HTML
@@ -154,7 +158,10 @@ class Single
             $indentWidth = mb_strlen($indent);
             $restrictedWidth = $indentWidth + $spacing;
             $maxLines = 4;
-            $statusMessage = mb_str_split($statusMessage, $nameWidth - $restrictedWidth);
+            $nameMinusRestrictedWidth = $nameWidth - $restrictedWidth;
+
+            assert($nameMinusRestrictedWidth > 0);
+            $statusMessage = mb_str_split($statusMessage, $nameMinusRestrictedWidth);
 
             if (count($statusMessage) > $maxLines) {
                 $statusMessage = array_slice($statusMessage, 0, $maxLines);
@@ -321,7 +328,10 @@ class Single
 
         $exception = null;
         if ($this->hasException() && $this->shouldShowExceptionPreview()) {
-            $exception = ExceptionPreview::make($this->error);
+            $error = $this->error;
+
+            assert($error !== null);
+            $exception = ExceptionPreview::make($error);
 
             $exception->renderType(indent: 2);
         }

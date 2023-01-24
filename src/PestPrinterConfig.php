@@ -45,7 +45,10 @@ class PestPrinterConfig
      */
     public static function colorMode(): string
     {
-        return env('PEST_PRINTER_COLOR_MODE', self::COLOR_MODE_DEFAULT);
+        $colorMode = env('PEST_PRINTER_COLOR_MODE', self::COLOR_MODE_DEFAULT);
+        assert(is_string($colorMode));
+
+        return $colorMode;
     }
 
     /**

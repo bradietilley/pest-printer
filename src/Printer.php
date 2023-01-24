@@ -30,6 +30,9 @@ class Printer implements \PHPUnit\TextUI\ResultPrinter
 
     protected static string $singleClass = Single::class;
 
+    /**
+     * @var null|Collection<int, Group>
+     */
     protected ?Collection $groups = null;
 
     public function printResult(TestResult $result): void
@@ -39,6 +42,7 @@ class Printer implements \PHPUnit\TextUI\ResultPrinter
         $tests = $this->groups
             ->map(fn (Group $group) => $group->tests())
             ->collapse()
+            /** @phpstan-ignore-next-line */
             ->groupBy(fn (Single $single) => $single->getStatus()->value)
             ->map(fn (Collection $singles, string $status) => [
                 'count' => $singles->count(),
@@ -48,9 +52,10 @@ class Printer implements \PHPUnit\TextUI\ResultPrinter
             ->sortBy('count', descending: true)
             ->values();
 
-        $status = Status::getLowestDemoninator(
-            $tests->pluck('status')->all(),
-        );
+        /** @var array<int, Status> */
+        $statuses = $tests->pluck('status')->all();
+
+        $status = Status::getLowestDemoninator($statuses);
 
         $text = $tests
             ->map(function (array $data) {
@@ -161,6 +166,8 @@ class Printer implements \PHPUnit\TextUI\ResultPrinter
 
     public function addError(Test $test, Throwable $t, float $time): void
     {
+        assert($this->single !== null);
+
         $this->single
             ->setTime($time)
             ->setError($t)
@@ -169,6 +176,8 @@ class Printer implements \PHPUnit\TextUI\ResultPrinter
 
     public function addWarning(Test $test, Warning $e, float $time): void
     {
+        assert($this->single !== null);
+
         $this->single
             ->setTime($time)
             ->setError($e)
@@ -177,6 +186,8 @@ class Printer implements \PHPUnit\TextUI\ResultPrinter
 
     public function addFailure(Test $test, AssertionFailedError $e, float $time): void
     {
+        assert($this->single !== null);
+
         $this->single
             ->setTime($time)
             ->setError($e)
@@ -185,6 +196,8 @@ class Printer implements \PHPUnit\TextUI\ResultPrinter
 
     public function addIncompleteTest(Test $test, Throwable $t, float $time): void
     {
+        assert($this->single !== null);
+
         $this->single
             ->setTime($time)
             ->setError($t)
@@ -193,6 +206,8 @@ class Printer implements \PHPUnit\TextUI\ResultPrinter
 
     public function addRiskyTest(Test $test, Throwable $t, float $time): void
     {
+        assert($this->single !== null);
+
         $this->single
             ->setTime($time)
             ->setError($t)
@@ -201,6 +216,8 @@ class Printer implements \PHPUnit\TextUI\ResultPrinter
 
     public function addSkippedTest(Test $test, Throwable $t, float $time): void
     {
+        assert($this->single !== null);
+
         $this->single
             ->setTime($time)
             ->setError($t)
@@ -214,8 +231,7 @@ class Printer implements \PHPUnit\TextUI\ResultPrinter
                 return;
             }
 
-            $this->makeGroup($suite);
-            $this->group->start();
+            $this->makeGroup($suite)->start();
         } catch (\Throwable $e) {
             dd($e);
         }
@@ -244,6 +260,7 @@ class Printer implements \PHPUnit\TextUI\ResultPrinter
             $this->single = $this->makeSingle($test);
             $this->single->start();
 
+            assert($this->group !== null);
             $this->group->addTest($this->single);
         } catch (\Throwable $e) {
             dd($e);
@@ -256,6 +273,7 @@ class Printer implements \PHPUnit\TextUI\ResultPrinter
     public function endTest(Test $test, float $time): void
     {
         try {
+            assert($this->single !== null);
             $this->single->setPassedIfPending()->setTime($time)->end();
         } catch (\Throwable $e) {
             dd($e);

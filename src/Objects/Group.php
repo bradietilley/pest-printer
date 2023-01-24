@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestSuite;
 
 class Group
 {
-    /** @var Collection<Single> */
+    /** @var Collection<int, Single> */
     protected Collection $tests;
 
     protected ?string $lastTest = null;
@@ -49,6 +49,9 @@ class Group
         return $this->lastTest;
     }
 
+    /**
+     * @return Collection<int, Single>
+     */
     public function tests(): Collection
     {
         return $this->tests;
