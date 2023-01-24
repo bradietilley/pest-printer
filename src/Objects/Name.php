@@ -1,6 +1,6 @@
 <?php
 
-namespace BradieTilley\Objects;
+namespace BradieTilley\PestPrinter\Objects;
 
 class Name
 {
@@ -36,11 +36,11 @@ class Name
             $dataset = trim($matches[2]);
         }
 
-        return [ ucfirst($name), $dataset ];
+        return [ucfirst($name), $dataset];
     }
 
     public static function make(string $name): self
     {
-        return new self(... static::parse($name));
-    } 
+        return new self(...static::parse($name));
+    }
 }

@@ -1,12 +1,12 @@
 <?php
 
-namespace BradieTilley;
+namespace BradieTilley\PestPrinter;
 
-use BradieTilley\Exceptions\PrinterException;
-use BradieTilley\Objects\Group;
-use BradieTilley\Objects\Single;
-use BradieTilley\Objects\Status;
-use BradieTilley\Objects\Time;
+use BradieTilley\PestPrinter\Exceptions\PrinterException;
+use BradieTilley\PestPrinter\Objects\Group;
+use BradieTilley\PestPrinter\Objects\Single;
+use BradieTilley\PestPrinter\Objects\Status;
+use BradieTilley\PestPrinter\Objects\Time;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Test;
@@ -23,9 +23,11 @@ class Printer implements \PHPUnit\TextUI\ResultPrinter
     protected static ?OutputInterface $renderer = null;
 
     protected ?Group $group = null;
+
     protected ?Single $single = null;
 
     protected static string $groupClass = Group::class;
+
     protected static string $singleClass = Single::class;
 
     protected ?Collection $groups = null;
@@ -76,7 +78,6 @@ class Printer implements \PHPUnit\TextUI\ResultPrinter
         $time = number_format($time, decimals: 3);
 
         $testsTerm = ($count === 1) ? 'test' : 'tests';
-
 
         if ($tests->isEmpty()) {
             $text = 'No tests matched';
@@ -235,7 +236,7 @@ class Printer implements \PHPUnit\TextUI\ResultPrinter
     }
 
     /**
-     * @param \PHPUnit\Framework\TestCase $test
+     * @param  \PHPUnit\Framework\TestCase  $test
      */
     public function startTest(Test $test): void
     {
@@ -250,7 +251,7 @@ class Printer implements \PHPUnit\TextUI\ResultPrinter
     }
 
     /**
-     * @param \PHPUnit\Framework\TestCase $test
+     * @param  \PHPUnit\Framework\TestCase  $test
      */
     public function endTest(Test $test, float $time): void
     {
@@ -263,10 +264,11 @@ class Printer implements \PHPUnit\TextUI\ResultPrinter
 
     public static function delimiter(): void
     {
-        $class = PestPrinterConfig::color('text-zinc-700');
+        $delimiter = Config::getDelimiterText();
+        $class = Config::getDelimiterClass();
 
         Renderer::render(<<<HTML
-            <div class="mt-1 {$class} content-repeat-['-']"></div>
+            <div class="mt-1 {$class} content-repeat-['{$delimiter}']"></div>
         HTML);
     }
 }

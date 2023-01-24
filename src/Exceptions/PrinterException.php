@@ -1,6 +1,6 @@
 <?php
 
-namespace BradieTilley\Exceptions;
+namespace BradieTilley\PestPrinter\Exceptions;
 
 use Exception;
 

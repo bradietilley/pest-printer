@@ -1,12 +1,12 @@
 <?php
 
-namespace BradieTilley\Objects;
+namespace BradieTilley\PestPrinter\Objects;
 
-use BradieTilley\PestPrinterConfig;
-use BradieTilley\Renderer;
+use BradieTilley\PestPrinter\PestPrinterConfig;
+use BradieTilley\PestPrinter\Renderer;
 use Illuminate\Support\Collection;
-use PHPUnit\Framework\TestSuite;
 use Illuminate\Support\Str;
+use PHPUnit\Framework\TestSuite;
 use function Termwind\{render};
 
 class Group

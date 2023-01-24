@@ -1,13 +1,15 @@
 <?php
 
-namespace BradieTilley\Objects;
+namespace BradieTilley\PestPrinter\Objects;
 
-use BradieTilley\PestPrinterConfig;
+use BradieTilley\PestPrinter\PestPrinterConfig;
 
 class Time
 {
     public const FAST = 0.2;
+
     public const OKAY = 0.75;
+
     public const SLOW = INF;
 
     public function __construct(protected ?float $time = null)
@@ -46,7 +48,7 @@ class Time
             return 'unknown';
         }
 
-        return number_format($this->time, decimals: 3) . 's';
+        return number_format($this->time, decimals: 3).'s';
     }
 
     public static function parse(?float $time): self

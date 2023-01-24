@@ -1,13 +1,13 @@
 <?php
 
-namespace BradieTilley\Objects;
+namespace BradieTilley\PestPrinter\Objects;
 
-use BradieTilley\PestPrinterConfig;
-use BradieTilley\Renderer;
+use BradieTilley\PestPrinter\PestPrinterConfig;
+use BradieTilley\PestPrinter\Renderer;
 use PHPUnit\Framework\ExceptionWrapper;
 use PHPUnit\Framework\ExpectationFailedException;
-use Throwable;
 use function Termwind\{render};
+use Throwable;
 
 class ExceptionPreview
 {
@@ -75,12 +75,12 @@ class ExceptionPreview
     public function getFriendlyClassName(): string
     {
         $class = get_class($this->exception);
-        
+
         if ($this->exception instanceof ExpectationFailedException) {
             $class = $this->exception->getComparisonFailure() ?? $this->exception;
             $class = get_class($class);
         }
-        
+
         if ($this->exception instanceof ExceptionWrapper) {
             $class = $this->exception->getClassName();
         }
@@ -101,9 +101,9 @@ class ExceptionPreview
             '>' => '&gt;',
         ];
 
-        $rows = array_map(fn ($lineText) => rtrim($lineText, "\n\r") . "&nbsp;", $rows);
+        $rows = array_map(fn ($lineText) => rtrim($lineText, "\n\r").'&nbsp;', $rows);
         $lines = implode(PHP_EOL, $rows);
-        $lines = str_replace(array_keys($safeDisplay), array_values($safeDisplay), $lines);;
+        $lines = str_replace(array_keys($safeDisplay), array_values($safeDisplay), $lines);
 
         return $lines;
     }
@@ -117,7 +117,7 @@ class ExceptionPreview
 
         // Extract about 10 rows of code with the affected line in the middle
         $rows = $this->extractAroundLine($line, $file);
-        
+
         // Determine the first line of the code snippet
         $firstLine = array_key_first($rows);
 

@@ -1,11 +1,10 @@
 <?php
 
-namespace BradieTilley;
+namespace BradieTilley\PestPrinter;
 
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Termwind\Termwind;
-
 use function Termwind\{render};
 
 abstract class Renderer
@@ -35,7 +34,7 @@ abstract class Renderer
     {
         static::$output = $output;
     }
-    
+
     /**
      * Render the given HTML via Termwind
      */

@@ -10,7 +10,7 @@
     },
     "autoload": {
         "psr-4": {
-            "BradieTilley\\": "src/"
+            "BradieTilley\\PestPrinter\\": "src/"
         }
     },
     "authors": [
@@ -23,6 +23,13 @@
     "config": {
         "allow-plugins": {
             "pestphp/pest-plugin": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "BradieTilley\\PestPrinter\\PestPrinterServiceProvider"
+            ]
         }
     }
 }

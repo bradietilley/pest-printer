@@ -1,10 +1,11 @@
 <?php
 
-namespace BradieTilley;
+namespace BradieTilley\PestPrinter;
 
 class PestPrinterConfig
 {
     public const COLOR_MODE_DEFAULT = 'default';
+
     public const COLOR_MODE_SAFE = 'safe';
 
     /**
@@ -30,7 +31,7 @@ class PestPrinterConfig
                 'zinc' => 'gray',
                 'slate' => 'gray',
             ];
-            
+
             $color = $map[$color] ?? $color;
 
             return sprintf('%s-%s', $type, $color);

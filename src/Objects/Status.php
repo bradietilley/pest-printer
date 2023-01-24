@@ -1,8 +1,8 @@
 <?php
 
-namespace BradieTilley\Objects;
+namespace BradieTilley\PestPrinter\Objects;
 
-use BradieTilley\PestPrinterConfig;
+use BradieTilley\PestPrinter\PestPrinterConfig;
 
 enum Status: string
 {
@@ -53,7 +53,7 @@ enum Status: string
 
     public function inverseCss(): string
     {
-        return PestPrinterConfig::color("bg-{$this->color()}-700") . ' text-white';
+        return PestPrinterConfig::color("bg-{$this->color()}-700").' text-white';
     }
 
     public function color(): string
@@ -107,7 +107,7 @@ enum Status: string
     }
 
     /**
-     * @param array<Status> $statuses
+     * @param  array<Status>  $statuses
      * @return Status
      */
     public static function getLowestDemoninator(array $statuses): self
