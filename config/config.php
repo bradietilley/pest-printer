@@ -6,7 +6,7 @@ return [
             'text' => '-',
             'class' => 'text-zinc-700',
         ],
-        
+
         'datasetIndentation' => [
             'text' => '>>>>',
             'spacing' => 1,
@@ -48,90 +48,131 @@ return [
 
         'failedTestDelimiter3' => [
             'text' => '›',
-        ]
+        ],
+
+        'testName' => [
+            'class' => 'bg-gray-800 text-white',
+        ],
+
+        'exceptionPreview' => [
+            'labels' => [
+                'class' => 'text-gray-700',
+            ],
+        ],
+
+        'testIndex' => [
+            'class' => 'text-zinc-600',
+        ],
+
+        'widths' => [
+            'left' => 2,
+            'index' => 9,
+            'right' => 2,
+            'padding' => 1,
+            'status' => 2,
+            'time' => 7,
+        ],
     ],
 
     'statuses' => [
         'pending' => [
             'present' => 'Pending',
             'past' => 'Pending',
+            'plural' => 'Pendings',
             'icon' => 'P',
             'showMessageInline' => false,
             'color' => 'gray',
             'primaryCss' => 'text-:color',
             'inverseCss' => 'bg-:color-700 text-white',
+            'showAdditionalInformation' => false,
         ],
         'success' => [
             'present' => 'Pass',
             'past' => 'Passed',
+            'plural' => 'Passes',
             'icon' => '✓',
             'showMessageInline' => false,
             'color' => 'green',
             'primaryCss' => 'text-:color',
             'inverseCss' => 'bg-:color-700 text-white',
+            'showAdditionalInformation' => false,
         ],
         'failed' => [
             'present' => 'Failure',
             'past' => 'Failed',
+            'plural' => 'Failures',
             'icon' => '✗',
             'showMessageInline' => false,
             'color' => 'red',
             'primaryCss' => 'text-:color',
             'inverseCss' => 'bg-:color-700 text-white',
+            'showAdditionalInformation' => true,
         ],
         'error' => [
             'present' => 'Error',
             'past' => 'Errored',
+            'plural' => 'Errors',
             'icon' => 'E',
             'showMessageInline' => false,
             'color' => 'red',
             'primaryCss' => 'text-:color',
             'inverseCss' => 'bg-:color-700 text-white',
+            'showAdditionalInformation' => true,
         ],
         'warning' => [
             'present' => 'Warning',
             'past' => 'Warned',
+            'plural' => 'Warnings',
             'icon' => '!',
             'showMessageInline' => true,
             'color' => 'yellow',
             'primaryCss' => 'text-:color',
             'inverseCss' => 'bg-:color-700 text-white',
+            'showAdditionalInformation' => true,
         ],
         'skipped' => [
             'present' => 'Skip',
             'past' => 'Skipped',
+            'plural' => 'Skips',
             'icon' => 'S',
             'showMessageInline' => true,
             'color' => 'yellow',
             'primaryCss' => 'text-:color',
             'inverseCss' => 'bg-:color-700 text-white',
+            'showAdditionalInformation' => true,
         ],
         'incomplete' => [
             'present' => 'Incomplete',
             'past' => 'Incompleted',
+            'plural' => 'Incompleted',
             'icon' => 'I',
             'showMessageInline' => true,
             'color' => 'yellow',
             'primaryCss' => 'text-:color',
             'inverseCss' => 'bg-:color-700 text-white',
+            'showAdditionalInformation' => true,
         ],
         'risky' => [
             'present' => 'Risky',
             'past' => 'Risky',
+            'plural' => 'Risky',
             'icon' => 'R',
             'showMessageInline' => true,
             'color' => 'yellow',
             'primaryCss' => 'text-:color',
             'inverseCss' => 'bg-:color-700 text-white',
+            'showAdditionalInformation' => true,
         ],
         'unknown' => [
             'present' => 'Unknown',
             'past' => 'Unknown',
+            'plural' => 'Unknown',
             'icon' => '?',
             'showMessageInline' => true,
             'color' => 'gray',
             'primaryCss' => 'text-:color',
             'inverseCss' => 'bg-:color-700 text-white',
+            'showAdditionalInformation' => true,
         ],
     ],
 ];

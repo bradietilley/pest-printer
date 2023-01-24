@@ -51,6 +51,11 @@ enum Status: string
         return Config::getStatusTextPresentTense($this);
     }
 
+    public function showAdditionalInformation(): bool
+    {
+        return Config::getStatusShowAdditionalInformation($this);
+    }
+
     public function group(): self
     {
         return match ($this) {
@@ -95,11 +100,6 @@ enum Status: string
 
     public function pluralTerm(): string
     {
-        return match ($this) {
-            self::FAILED => 'Failures',
-            self::WARNING => 'Warnings',
-            self::SUCCESS => 'Successes',
-            default => 'Unknowns',
-        };
+        return Config::getStatusTextPluralTerm($this);
     }
 }

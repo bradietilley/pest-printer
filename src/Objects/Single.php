@@ -4,7 +4,6 @@ namespace BradieTilley\PestPrinter\Objects;
 
 use AssertionError;
 use BradieTilley\PestPrinter\Config;
-use BradieTilley\PestPrinter\PestPrinterConfig;
 use BradieTilley\PestPrinter\Printer;
 use BradieTilley\PestPrinter\Renderer;
 use PHPUnit\Framework\AssertionFailedError;
@@ -89,17 +88,16 @@ class Single
         $name = $this->getName();
 
         $indexText = "[{$this->suiteIndex}/{$this->suiteMax}]";
-        $indexCss = PestPrinterConfig::color('text-zinc-600');
-        $cyan = PestPrinterConfig::color('text-cyan-600');
-        $gray = PestPrinterConfig::color('text-gray-600');
+        $indexCss = Config::getTestIndexClass();
+        $elipsisCss = Config::getTestNameElipsisClass();
 
         $widths = [
-            'left' => 2,
-            'index' => 9,
-            'right' => 2,
-            'padding' => 1,
-            'status' => 2,
-            'time' => 7,
+            'left' => Config::getWidthLeft(),
+            'index' => Config::getWidthIndex(),
+            'right' => Config::getWidthRight(),
+            'padding' => Config::getWidthPadding(),
+            'status' => Config::getWidthStatus(),
+            'time' => Config::getWidthTime(),
         ];
 
         $otherWidth = $widths['left']
@@ -197,9 +195,10 @@ class Single
             $timeText,
         ];
         $symbol = Config::getRowSuffixText();
+        $symbolCss = Config::getRowSuffixClass();
         while (count($time) < count($text)) {
             $time[] = <<<HTML
-            <div class="{$gray}">{$symbol}</div>
+            <div class="{$symbolCss}">{$symbol}</div>
             HTML;
         }
 
@@ -211,9 +210,10 @@ class Single
             $indexText,
         ];
         $symbol = '';
+        $symbolCss = '';
         while (count($index) < count($text)) {
             $index[] = <<<HTML
-            <div class="{$gray}">{$symbol}</div>
+            <div class="{$symbolCss}">{$symbol}</div>
             HTML;
         }
 
@@ -233,7 +233,7 @@ class Single
                     <span class="w-{$nameWidth} max-w-{$nameWidth} truncate">
                         <div class="flex">
                             <div class="w-auto">{$text[$row]}</div>
-                            <span class="w-auto pl-1 {$gray} content-repeat-['{$elipsis}']"></span>
+                            <span class="w-auto pl-1 {$elipsisCss} content-repeat-['{$elipsis}']"></span>
                         </div>
                     </span>
 
@@ -279,7 +279,7 @@ class Single
 
     public function showAdditionalInformation(): bool
     {
-        return $this->status->group() !== Status::SUCCESS;
+        return $this->status->showAdditionalInformation();
     }
 
     public function renderAdditionalInformation(array &$issues): void

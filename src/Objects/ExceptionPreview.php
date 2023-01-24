@@ -3,11 +3,9 @@
 namespace BradieTilley\PestPrinter\Objects;
 
 use BradieTilley\PestPrinter\Config;
-use BradieTilley\PestPrinter\PestPrinterConfig;
 use BradieTilley\PestPrinter\Renderer;
 use PHPUnit\Framework\ExceptionWrapper;
 use PHPUnit\Framework\ExpectationFailedException;
-use function Termwind\{render};
 use Throwable;
 
 class ExceptionPreview
@@ -129,7 +127,7 @@ class ExceptionPreview
         $class = $this->getFriendlyClassName();
 
         $typeClass = $type ? 'flex' : 'hidden';
-        $gray = PestPrinterConfig::color('text-gray-700');
+        $gray = Config::getExceptionPreviewLabelClass();
 
         $html = <<<HTML
         <div class="pl-{$indent}">

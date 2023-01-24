@@ -55,6 +55,9 @@ class Config
         return Arr::get(static::$config, $key, $default);
     }
 
+    /**
+     * @return string
+     */
     public static function getDelimiterText(): string
     {
         return self::get('display.delimiter.text', '-');
@@ -105,9 +108,29 @@ class Config
         return self::get('display.rowSuffix.text', '↲');
     }
 
+    public static function getRowSuffixClass(): string
+    {
+        return self::get('display.rowSuffix.class', 'text-gray-600');
+    }
+
+    public static function getTestIndexClass(): string
+    {
+        return self::get('display.testIndex.class', 'text-zinc-600');
+    }
+
+    public static function getTestNameClass(): string
+    {
+        return self::get('display.testName.class', 'bg-gray-700 text-white');
+    }
+
     public static function getTestNameElipsisText(): string
     {
         return self::get('display.testNameElipsis.text', '.');
+    }
+
+    public static function getTestNameElipsisClass(): string
+    {
+        return self::get('display.testNameElipsis.class', 'text-gray-600');
     }
 
     public static function getFailedTestDelimiter1Text(): string
@@ -130,55 +153,101 @@ class Config
         return self::get('display.failedTestDelimiter.class', 'text-gray');
     }
 
-    private static function statusKey(Status $status): string
+    public static function getExceptionPreviewLabelClass(): string
     {
-        return sprintf('statuses.%s', $status->value);
+        return self::Get('display.exceptionPreview.labels.class', 'text-gray-500');
+    }
+
+    /**
+     * @param  Status  $status
+     * @param  string  $key
+     * @return string
+     */
+    private static function statusKey(Status $status, string $key): string
+    {
+        return sprintf('statuses.%s.%s', $status->value, $key);
     }
 
     public static function getStatusIcon(Status $status): string
     {
-        return self::get(self::statusKey($status) . '.icon');
+        return self::get(self::statusKey($status, 'icon'));
     }
-    
+
     public static function getStatusTextPastTense(Status $status): string
     {
-        return self::get(self::statusKey($status) . '.past');
+        return self::get(self::statusKey($status, 'past'));
     }
 
     public static function getStatusTextPresentTense(Status $status): string
     {
-        return self::get(self::statusKey($status) . '.present');
+        return self::get(self::statusKey($status, 'present'));
+    }
+
+    public static function getStatusTextPluralTerm(Status $status): string
+    {
+        return self::get(self::statusKey($status, 'plural'));
     }
 
     public static function getStatusShowMessageInline(Status $status): bool
     {
-        return self::get(self::statusKey($status) . '.showMessageInline');
+        return self::get(self::statusKey($status, 'showMessageInline'));
     }
 
     public static function getStatusColor(Status $status): string
     {
-        if (empty(self::get(self::statusKey($status) . '.color'))) {
-            dd($status);
-        }
-
-        return self::get(self::statusKey($status) . '.color');
+        return self::get(self::statusKey($status, 'color'));
     }
 
     public static function getStatusPrimaryCss(Status $status): string
     {
         return str_replace(
-            search: ':color',
-            replace: self::getStatusColor($status),
-            subject: self::get(self::statusKey($status) . '.primaryCss'),
+            ':color',
+            self::getStatusColor($status),
+            self::get(self::statusKey($status, 'primaryCss')),
         );
     }
 
     public static function getStatusInverseCss(Status $status): string
     {
         return str_replace(
-            search: ':color',
-            replace: self::getStatusColor($status),
-            subject: self::get(self::statusKey($status) . '.inverseCss'),
+            ':color',
+            self::getStatusColor($status),
+            self::get(self::statusKey($status, 'inverseCss')),
         );
+    }
+
+    public static function getStatusShowAdditionalInformation(Status $status): bool
+    {
+        return self::get(self::statusKey($status, 'showAdditionalInformation'));
+    }
+
+    public static function getWidthLeft(): int
+    {
+        return self::get('display.widths.left', 2);
+    }
+
+    public static function getWidthIndex(): int
+    {
+        return self::get('display.widths.index', 9);
+    }
+
+    public static function getWidthRight(): int
+    {
+        return self::get('display.widths.right', 2);
+    }
+
+    public static function getWidthPadding(): int
+    {
+        return self::get('display.widths.padding', 1);
+    }
+
+    public static function getWidthStatus(): int
+    {
+        return self::get('display.widths.status', 2);
+    }
+
+    public static function getWidthTime(): int
+    {
+        return self::get('display.widths.time', 7);
     }
 }

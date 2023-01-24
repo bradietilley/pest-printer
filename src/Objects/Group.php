@@ -2,12 +2,11 @@
 
 namespace BradieTilley\PestPrinter\Objects;
 
-use BradieTilley\PestPrinter\PestPrinterConfig;
+use BradieTilley\PestPrinter\Config;
 use BradieTilley\PestPrinter\Renderer;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use PHPUnit\Framework\TestSuite;
-use function Termwind\{render};
 
 class Group
 {
@@ -87,7 +86,7 @@ class Group
         $this->running = true;
 
         $title = $this->getName();
-        $gray = PestPrinterConfig::color('bg-gray-800');
+        $gray = Config::getTestNameClass();
 
         Renderer::render(<<<HTML
             <div class="pl-2 py-1">
