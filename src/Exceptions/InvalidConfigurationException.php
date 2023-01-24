@@ -29,4 +29,12 @@ class InvalidConfigurationException extends Exception
             $key
         ));
     }
+
+    public static function invalidFloat(string $key): self
+    {
+        return new self(sprintf(
+            'Invalid configuration value found for %s (must be float)',
+            $key
+        ));
+    }
 }

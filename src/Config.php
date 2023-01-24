@@ -53,7 +53,9 @@ class Config
             static::read();
         }
 
-        return Arr::get(self::all(), $key, $default);
+        $config = self::all();
+
+        return Arr::get($config, $key, $default);
     }
 
     public static function getDelimiterText(): string
@@ -249,6 +251,49 @@ class Config
         return self::getInteger('display.widths.time', 7);
     }
 
+    public static function getSafeColorMode(): bool
+    {
+        return self::getBoolean('display.color.safeMode', false);
+    }
+
+    public static function getTimeGradeFastTime(): float
+    {
+        return self::getFloat('timing.grades.fast.time', 0.2);
+    }
+
+    public static function getTimeGradeFastClass(): string
+    {
+        return self::getString('timing.grades.fast.class', 'text-green-500');
+    }
+
+    public static function getTimeGradeOkayTime(): float
+    {
+        return self::getFloat('timing.grades.okay.time', 0.5);
+    }
+
+    public static function getTimeGradeOkayClass(): string
+    {
+        return self::getString('timing.grades.okay.class', 'text-amber-500');
+    }
+
+    public static function getTimeGradeSlowTime(): float
+    {
+        return self::getFloat('timing.grades.slow.time', 31536000);
+    }
+
+    public static function getTimeGradeSlowClass(): string
+    {
+        return self::getString('timing.grades.slow.class', 'text-red-500');
+    }
+
+    public static function getTimeGradeNullClass(): string
+    {
+        return self::getString('timing.grades.null.class', 'text-gray-500');
+    }
+
+    /**
+     * Internal use: Fetch the configuration value as a string (phpstan)
+     */
     private static function getString(string $key, string $default = ''): string
     {
         $value = self::get($key, $default);
@@ -260,6 +305,9 @@ class Config
         return $value;
     }
 
+    /**
+     * Internal use: Fetch the configuration value as a boolean (phpstan)
+     */
     private static function getBoolean(string $key, bool $default = false): bool
     {
         $value = self::get($key, $default);
@@ -271,12 +319,33 @@ class Config
         return $value;
     }
 
+    /**
+     * Internal use: Fetch the configuration value as an integer (phpstan)
+     */
     private static function getInteger(string $key, int $default = 0): int
     {
         $value = self::get($key, $default);
 
         if (! is_int($value)) {
             throw InvalidConfigurationException::invalidInteger($key);
+        }
+
+        return $value;
+    }
+
+    /**
+     * Internal use: Fetch the configuration value as a float (phpstan)
+     */
+    private static function getFloat(string $key, float $default = 0.0): float
+    {
+        $value = self::get($key, $default);
+
+        if (is_int($value)) {
+            $value = (float) $value;
+        }
+
+        if (! is_float($value)) {
+            throw InvalidConfigurationException::invalidFloat($key);
         }
 
         return $value;

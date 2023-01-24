@@ -72,6 +72,30 @@ return [
             'status' => 2,
             'time' => 7,
         ],
+
+        'color' => [
+            'safeMode' => false,
+        ],
+    ],
+
+    'timing' => [
+        'grades' => [
+            'fast' => [
+                'time' => 0.2,
+                'class' => 'text-green-500',
+            ],
+            'okay' => [
+                'time' => 0.5,
+                'class' => 'text-amber-500',
+            ],
+            'slow' => [
+                'time' => 31536000,
+                'class' => 'text-red-500',
+            ],
+            'null' => [
+                'class' => 'text-gray-500',
+            ],
+        ],
     ],
 
     'statuses' => [
