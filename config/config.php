@@ -98,6 +98,30 @@ return [
         ],
 
         /**
+         * The test index shows the current position and total number of tests
+         * in a given test case.
+         *
+         * E.g:
+         *
+         *     [COLOR][1/2][/COLOR] ✓ it can do something great
+         *     [COLOR][2/2][/COLOR] ✓ it can do something awesome
+         */
+        'testIndex' => [
+            'class' => 'text-zinc-600',
+        ],
+
+        /**
+         * The test name is printed as the testing begins on a new test file.
+         *
+         * E.g.
+         *
+         *    [CLASS]Unit\ExampleTest[/CLASS]
+         */
+        'testName' => [
+            'class' => 'bg-gray-800 text-white',
+        ],
+
+        /**
          * The elipsis text is repeated to fill in the gap between the end of
          * the test name (or dataset names) and the time it took to run the test.
          *
@@ -162,17 +186,6 @@ return [
         ],
 
         /**
-         * The test name is printed as the testing begins on a new test file.
-         *
-         * E.g.
-         *
-         *    [CLASS]Unit\ExampleTest[/CLASS]
-         */
-        'testName' => [
-            'class' => 'bg-gray-800 text-white',
-        ],
-
-        /**
          * The exception preview is a block of text that is displayed when
          * detailing why a test has failed through means of printing out the
          * relevant exception. It includes a breakdown of the File and Line
@@ -187,19 +200,6 @@ return [
             'labels' => [
                 'class' => 'text-gray-700',
             ],
-        ],
-
-        /**
-         * The test index shows the current position and total number of tests
-         * in a given test case.
-         *
-         * E.g:
-         *
-         *     [COLOR][1/2][/COLOR] ✓ it can do something great
-         *     [COLOR][2/2][/COLOR] ✓ it can do something awesome
-         */
-        'testIndex' => [
-            'class' => 'text-zinc-600',
         ],
 
         /**

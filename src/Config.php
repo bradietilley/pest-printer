@@ -58,141 +58,369 @@ class Config
         return Arr::get($config, $key, $default);
     }
 
+    /**
+     * The delimiter is displayed around each failure breakdown
+     *
+     * E.g:
+     *
+     * [DELIMITER]
+     * Failure #1
+     * Failed to assert Blah
+     * Stack trace here
+     * [DELIMITER]
+     * Failure #2
+     * Failed to assert Blah
+     * Stack trace here
+     * [DELIMITER]
+     */
     public static function getDelimiterText(): string
     {
         return self::getString('display.delimiter.text', '-');
     }
 
+    /**
+     * The delimiter is displayed around each failure breakdown
+     *
+     * E.g:
+     *
+     * [DELIMITER]
+     * Failure #1
+     * Failed to assert Blah
+     * Stack trace here
+     * [DELIMITER]
+     * Failure #2
+     * Failed to assert Blah
+     * Stack trace here
+     * [DELIMITER]
+     */
     public static function getDelimiterClass(): string
     {
         return self::getString('display.delimiter.class', 'text-zinc-700');
     }
 
+    /**
+     * The dataset indentation is used whenever your tests utilise
+     * dataset, and is applied to each dataset's name.
+     *
+     * E.g:
+     *
+     * it can do something great
+     * [INDENTATION] as an admin
+     * [INDENTATION] as a customer
+     */
     public static function getDatasetIndentText(): string
     {
         return self::getString('display.datasetIndentation.text', '>>>>');
     }
 
+    /**
+     * The dataset indentation is used whenever your tests utilise
+     * dataset, and is applied to each dataset's name.
+     *
+     * E.g:
+     *
+     * it can do something great
+     * [INDENTATION] as an admin
+     * [INDENTATION] as a customer
+     */
     public static function getDatasetIndentSpacing(): int
     {
         return self::getInteger('display.datasetIndentation.spacing', 1);
     }
 
+    /**
+     * The dataset indentation is used whenever your tests utilise
+     * dataset, and is applied to each dataset's name.
+     *
+     * E.g:
+     *
+     * it can do something great
+     * [INDENTATION] as an admin
+     * [INDENTATION] as a customer
+     */
     public static function getDatasetIndentClass(): string
     {
         return self::getString('display.datasetIndentation.class', '');
     }
 
+    /**
+     * The dataset name colouring is applied for the dataset name only.
+     *
+     * E.g:
+     *
+     * it can do something great
+     * >>>> [CLASS]as an admin[/CLASS]
+     * >>>> [CLASS]as a customer[/CLASS]
+     */
     public static function getDatasetNameClass(): string
     {
         return self::getString('display.datasetName.class', '');
     }
 
+    /**
+     * The status message is shown for statuses that have a corresponding
+     * "statusMessage" (see phpunit). The `showMessageInline` option for
+     * each status (config `printer.statuses.*.showMessageInline`) allows
+     * you to control which statuses will show this message.
+     *
+     * E.g. a skipped (S) test:
+     *
+     *     S  it can do something great
+     *        [TEXT][SPACING] This test is not working so we are skipping it
+     */
     public static function getStatusMessageSpacing(): int
     {
         return self::getInteger('display.statusMessage.spacing', 1);
     }
 
+    /**
+     * The status message is shown for statuses that have a corresponding
+     * "statusMessage" (see phpunit). The `showMessageInline` option for
+     * each status (config `printer.statuses.*.showMessageInline`) allows
+     * you to control which statuses will show this message.
+     *
+     * E.g. a skipped (S) test:
+     *
+     *     S  it can do something great
+     *        [TEXT][SPACING] This test is not working so we are skipping it
+     */
     public static function getStatusMessageText(): string
     {
         return self::getString('display.statusMessage.text', '⟶  ');
     }
 
+    /**
+     * The row prefix is applied whenever a test exceeds one line of text.
+     * This occurs when the name of the test is so long that it wraps, and
+     * also occurs when the test uses one or more dataset values. This text
+     * starts inline with the status icon.
+     *
+     * E.g.
+     *
+     *     ✗  it can do something great
+     *     [TEXT] >>> dataset name here
+     */
     public static function getRowPrefixText(): string
     {
         return self::getString('display.rowPrefix.text', '↳');
     }
 
+    /**
+     * The row prefix is applied whenever a test exceeds one line of text.
+     * This occurs when the name of the test is so long that it wraps, and
+     * also occurs when the test uses one or more dataset values. This text
+     * starts inline with the status icon.
+     *
+     * E.g.
+     *
+     *     ✗  it can do something great
+     *     [TEXT] >>> dataset name here
+     */
     public static function getRowSuffixText(): string
     {
         return self::getString('display.rowSuffix.text', '↲');
     }
 
+    /**
+     * The row suffix is applied whenever a test exceeds one line of text.
+     * This occurs when the name of the test is so long that it wraps, and
+     * also occurs when the test uses one or more dataset values. This text
+     * starts inline with the recorded time it took to run the test
+     *
+     * E.g.
+     *
+     *     ✗  it can do something great ...... 0.005s
+     *        and this is a long name ........ [TEXT]
+     */
     public static function getRowSuffixClass(): string
     {
         return self::getString('display.rowSuffix.class', 'text-gray-600');
     }
 
+    /**
+     * The test index shows the current position and total number of tests
+     * in a given test case.
+     *
+     * E.g:
+     *
+     *     [COLOR][1/2][/COLOR] ✓ it can do something great
+     *     [COLOR][2/2][/COLOR] ✓ it can do something awesome
+     */
     public static function getTestIndexClass(): string
     {
         return self::getString('display.testIndex.class', 'text-zinc-600');
     }
 
+    /**
+     * The test name is printed as the testing begins on a new test file.
+     *
+     * E.g.
+     *
+     *    [CLASS]Unit\ExampleTest[/CLASS]
+     */
     public static function getTestNameClass(): string
     {
         return self::getString('display.testName.class', 'bg-gray-700 text-white');
     }
 
+    /**
+     * The elipsis text is repeated to fill in the gap between the end of
+     * the test name (or dataset names) and the time it took to run the test.
+     *
+     *
+     * E.g.
+     *
+     *     ✗  it can do something great [ELIPSIS] 0.005s
+     */
     public static function getTestNameElipsisText(): string
     {
         return self::getString('display.testNameElipsis.text', '.');
     }
 
+    /**
+     * The elipsis text is repeated to fill in the gap between the end of
+     * the test name (or dataset names) and the time it took to run the test.
+     *
+     *
+     * E.g.
+     *
+     *     ✗  it can do something great [ELIPSIS] 0.005s
+     */
     public static function getTestNameElipsisClass(): string
     {
         return self::getString('display.testNameElipsis.class', 'text-gray-600');
     }
 
-    public static function getFailedTestDelimiter1Text(): string
-    {
-        return self::getString('display.failedTestDelimiter1.text', '•');
-    }
-
-    public static function getFailedTestDelimiter2Text(): string
-    {
-        return self::getString('display.failedTestDelimiter2.text', '»');
-    }
-
-    public static function getFailedTestDelimiter3Text(): string
-    {
-        return self::getString('display.failedTestDelimiter3.text', '›');
-    }
-
+    /**
+     * This delimiter separates the 2 or 3 segments of the test identifier
+     * and this allows you to change the color of the icons that separate
+     * them.
+     *
+     * E.g.
+     *
+     *                   Namespace                    Test Name                             Dataset Name
+     *  [COLOR]•[/COLOR] Unit\MyTest [COLOR]»[/COLOR] you can do something [COLOR]›[/COLOR] as an admin
+     */
     public static function getFailedTestDelimiterClass(): string
     {
         return self::getString('display.failedTestDelimiter.class', 'text-gray');
     }
 
+    /**
+     * The text for the first delimiter that separates the segments of the
+     * test identifier, displayed at the end of when printing out the reason
+     * a test has failed.
+     *
+     *         Namespace     Test Name              Dataset Name
+     *  [TEXT] Unit\MyTest » you can do something › as an admin
+     */
+    public static function getFailedTestDelimiter1Text(): string
+    {
+        return self::getString('display.failedTestDelimiter1.text', '•');
+    }
+
+    /**
+     * The text for the second delimiter that separates the segments of the
+     * test identifier, displayed at the end of when printing out the reason
+     * a test has failed.
+     *
+     *    Namespace          Test Name              Dataset Name
+     *  • Unit\MyTest [TEXT] you can do something › as an admin
+     */
+    public static function getFailedTestDelimiter2Text(): string
+    {
+        return self::getString('display.failedTestDelimiter2.text', '»');
+    }
+
+    /**
+     * The text for the first delimiter that separates the segments of the
+     * test identifier, displayed at the end of when printing out the reason
+     * a test has failed.
+     *
+     *    Namespace     Test Name                   Dataset Name
+     *  • Unit\MyTest » you can do something [TEXT] as an admin
+     */
+    public static function getFailedTestDelimiter3Text(): string
+    {
+        return self::getString('display.failedTestDelimiter3.text', '›');
+    }
+
+    /**
+     * The exception preview is a block of text that is displayed when
+     * detailing why a test has failed through means of printing out the
+     * relevant exception. It includes a breakdown of the File and Line
+     * which this can control the color of:
+     *
+     * E.g:
+     *
+     *        [COLOR]File:[/COLOR]  /path/to/tests/Unit/ExamplePHPTest.php
+     *        [COLOR]Line:[/COLOR]  76
+     */
     public static function getExceptionPreviewLabelClass(): string
     {
         return self::getString('display.exceptionPreview.labels.class', 'text-gray-500');
     }
 
     /**
-     * @param  Status  $status
-     * @param  string  $key
-     * @return string
+     * Internal function to get the given config key for the given status
+     * and key
+     *
+     * E.g:
+     *
+     * @param  Status  $status  // e.g. SKIPPED
+     * @param  string  $key     // e.g. "icon"
+     * @return string         // e.g. "statuses.skipped.icon"
      */
     private static function statusKey(Status $status, string $key): string
     {
         return sprintf('statuses.%s.%s', $status->value, $key);
     }
 
+    /**
+     * The status icon is displayed between the Index column and Test Name
+     * column and helps visually identify a test's status.
+     */
     public static function getStatusIcon(Status $status): string
     {
         return self::getString(self::statusKey($status, 'icon'));
     }
 
+    /**
+     * The status has a past-tense term
+     */
     public static function getStatusTextPastTense(Status $status): string
     {
         return self::getString(self::statusKey($status, 'past'));
     }
 
+    /**
+     * The status has a present-tense term
+     */
     public static function getStatusTextPresentTense(Status $status): string
     {
         return self::getString(self::statusKey($status, 'present'));
     }
 
+    /**
+     * The status has a pluralised term
+     */
     public static function getStatusTextPluralTerm(Status $status): string
     {
         return self::getString(self::statusKey($status, 'plural'));
     }
 
+    /**
+     * The status may or may not show messages inline
+     */
     public static function getStatusShowMessageInline(Status $status): bool
     {
         return self::getBoolean(self::statusKey($status, 'showMessageInline'));
     }
 
+    /**
+     * The status has a color which by default is applied to the primary
+     * and inverse classes to colourise the icon and other status labels
+     */
     public static function getStatusColor(Status $status): string
     {
         return self::getString(self::statusKey($status, 'color'));
