@@ -95,7 +95,7 @@ class Config
      */
     public static function getDelimiterClass(): string
     {
-        return self::getString('display.delimiter.class', 'text-zinc-700');
+        return self::getClassString('display.delimiter.class', 'text-zinc-700');
     }
 
     /**
@@ -140,7 +140,7 @@ class Config
      */
     public static function getDatasetIndentClass(): string
     {
-        return self::getString('display.datasetIndentation.class', '');
+        return self::getClassString('display.datasetIndentation.class', '');
     }
 
     /**
@@ -154,7 +154,7 @@ class Config
      */
     public static function getDatasetNameClass(): string
     {
-        return self::getString('display.datasetName.class', '');
+        return self::getClassString('display.datasetName.class', '');
     }
 
     /**
@@ -234,7 +234,7 @@ class Config
      */
     public static function getRowSuffixClass(): string
     {
-        return self::getString('display.rowSuffix.class', 'text-gray-600');
+        return self::getClassString('display.rowSuffix.class', 'text-gray-600');
     }
 
     /**
@@ -248,7 +248,7 @@ class Config
      */
     public static function getTestIndexClass(): string
     {
-        return self::getString('display.testIndex.class', 'text-zinc-600');
+        return self::getClassString('display.testIndex.class', 'text-zinc-600');
     }
 
     /**
@@ -260,7 +260,7 @@ class Config
      */
     public static function getTestNameClass(): string
     {
-        return self::getString('display.testName.class', 'bg-gray-700 text-white');
+        return self::getClassString('display.testName.class', 'bg-gray-700 text-white');
     }
 
     /**
@@ -288,7 +288,7 @@ class Config
      */
     public static function getTestNameElipsisClass(): string
     {
-        return self::getString('display.testNameElipsis.class', 'text-gray-600');
+        return self::getClassString('display.testNameElipsis.class', 'text-gray-600');
     }
 
     /**
@@ -303,7 +303,7 @@ class Config
      */
     public static function getFailedTestDelimiterClass(): string
     {
-        return self::getString('display.failedTestDelimiter.class', 'text-gray');
+        return self::getClassString('display.failedTestDelimiter.class', 'text-gray');
     }
 
     /**
@@ -358,7 +358,7 @@ class Config
      */
     public static function getExceptionPreviewLabelClass(): string
     {
-        return self::getString('display.exceptionPreview.labels.class', 'text-gray-500');
+        return self::getClassString('display.exceptionPreview.labels.class', 'text-gray-500');
     }
 
     /**
@@ -426,6 +426,9 @@ class Config
         return self::getString(self::statusKey($status, 'color'));
     }
 
+    /**
+     * Get the given status's primary CSS class list
+     */
     public static function getStatusPrimaryCss(Status $status): string
     {
         return str_replace(
@@ -435,6 +438,9 @@ class Config
         );
     }
 
+    /**
+     * Get the given status's inverse CSS class list
+     */
     public static function getStatusInverseCss(Status $status): string
     {
         return str_replace(
@@ -444,79 +450,168 @@ class Config
         );
     }
 
+    /**
+     * Determine whether or not the given status should show additional
+     * information, i.e. exceptions caught during the test.
+     */
     public static function getStatusShowAdditionalInformation(Status $status): bool
     {
         return self::getBoolean(self::statusKey($status, 'showAdditionalInformation'));
     }
 
+    /**
+     * The left "column" in the printer may be capped to a given width.
+     *
+     * E.g:
+     *
+     *      [LEFT][INDEX][PADDING][STATUS][PADDING](test name here)[PADDING][TIME][RIGHT]
+     */
     public static function getWidthLeft(): int
     {
         return self::getInteger('display.widths.left', 2);
     }
 
+    /**
+     * The index "column" in the printer may be capped to a given width.
+     *
+     * E.g:
+     *
+     *      [LEFT][INDEX][PADDING][STATUS][PADDING](test name here)[PADDING][TIME][RIGHT]
+     */
     public static function getWidthIndex(): int
     {
         return self::getInteger('display.widths.index', 9);
     }
 
+    /**
+     * The right "column" in the printer may be capped to a given width.
+     *
+     * E.g:
+     *
+     *      [LEFT][INDEX][PADDING][STATUS][PADDING](test name here)[PADDING][TIME][RIGHT]
+     */
     public static function getWidthRight(): int
     {
         return self::getInteger('display.widths.right', 2);
     }
 
+    /**
+     * The padding around status and test name "columns" in the printer may be capped to a given width.
+     *
+     * E.g:
+     *
+     *      [LEFT][INDEX][PADDING][STATUS][PADDING](test name here)[PADDING][TIME][RIGHT]
+     */
     public static function getWidthPadding(): int
     {
         return self::getInteger('display.widths.padding', 1);
     }
 
+    /**
+     * The status "column" in the printer may be capped to a given width.
+     *
+     * E.g:
+     *
+     *      [LEFT][INDEX][PADDING][STATUS][PADDING](test name here)[PADDING][TIME][RIGHT]
+     */
     public static function getWidthStatus(): int
     {
         return self::getInteger('display.widths.status', 2);
     }
 
+    /**
+     * The time "column" in the printer may be capped to a given width.
+     *
+     * E.g:
+     *
+     *      [LEFT][INDEX][PADDING][STATUS][PADDING](test name here)[PADDING][TIME][RIGHT]
+     */
     public static function getWidthTime(): int
     {
         return self::getInteger('display.widths.time', 7);
     }
 
+    /**
+     * Should the printer convert unsafe Termwind CSS classes (e.g. "bg-amber-400") to a
+     * safe Termwind CSS class (e.g. "bg-yellow")
+     */
     public static function getSafeColorMode(): bool
     {
         return self::getBoolean('display.color.safeMode', false);
     }
 
+    /**
+     * Get the maximum time (in seconds) that a test may run in order to classify
+     * as being "fast" grade.
+     */
     public static function getTimeGradeFastTime(): float
     {
         return self::getFloat('timing.grades.fast.time', 0.2);
     }
 
+    /**
+     * Get the Termwind CSS class list that is applied to tests that are "fast" grade.
+     */
     public static function getTimeGradeFastClass(): string
     {
-        return self::getString('timing.grades.fast.class', 'text-green-500');
+        return self::getClassString('timing.grades.fast.class', 'text-green-500');
     }
 
+    /**
+     * Get the maximum time (in seconds) that a test may run in order to classify
+     * as being "okay" grade.
+     */
     public static function getTimeGradeOkayTime(): float
     {
         return self::getFloat('timing.grades.okay.time', 0.5);
     }
 
+    /**
+     * Get the Termwind CSS class list that is applied to tests that are "okay" grade.
+     */
     public static function getTimeGradeOkayClass(): string
     {
-        return self::getString('timing.grades.okay.class', 'text-amber-500');
+        return self::getClassString('timing.grades.okay.class', 'text-amber-500');
     }
 
+    /**
+     * Get the maximum time (in seconds) that a test may run in order to classify
+     * as being "slow" grade.
+     */
     public static function getTimeGradeSlowTime(): float
     {
         return self::getFloat('timing.grades.slow.time', 31536000);
     }
 
+    /**
+     * Get the Termwind CSS class list that is applied to tests that are "slow" grade.
+     */
     public static function getTimeGradeSlowClass(): string
     {
-        return self::getString('timing.grades.slow.class', 'text-red-500');
+        return self::getClassString('timing.grades.slow.class', 'text-red-500');
     }
 
+    /**
+     * Get the Termwind CSS class list that is applied to tests that are "null" grade
+     * which is the default for when a time cannot be computed.
+     */
     public static function getTimeGradeNullClass(): string
     {
-        return self::getString('timing.grades.null.class', 'text-gray-500');
+        return self::getClassString('timing.grades.null.class', 'text-gray-500');
+    }
+
+    /**
+     * Internal use: Fetch the configuration value as a string (phpstan)
+     *
+     * Cast the given string (class list) to a color-safe class list, if
+     * configured to do so.
+     */
+    private static function getClassString(string $key, string $default = ''): string
+    {
+        $class = self::getString($key, $default);
+        $class = Color::safeIfConfigured($class);
+
+        return $class;
     }
 
     /**

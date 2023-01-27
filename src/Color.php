@@ -2,8 +2,12 @@
 
 namespace BradieTilley\PestPrinter;
 
-class ColorClass
+class Color
 {
+    /**
+     * Convert the given Termwind CSS class list to a terminal-safe
+     * class list
+     */
     public static function safe(string $unsafe): string
     {
         $parts = explode(' ', $unsafe);
@@ -34,6 +38,10 @@ class ColorClass
         return implode(' ', $parts);
     }
 
+    /**
+     * Convert the given Termwind CSS class list to a terminal-safe
+     * class list, if the config is set to use safe colors.
+     */
     public static function safeIfConfigured(string $unsafe): string
     {
         if (! Config::getSafeColorMode()) {
