@@ -81,7 +81,7 @@ class Config
 
     /**
      * Determine if the Config facade can be used
-     * 
+     *
      * setUp: no (facade root not set)
      * during: yes
      * tearDown: no (facade root unset)

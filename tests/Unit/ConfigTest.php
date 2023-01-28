@@ -107,7 +107,7 @@ test('config can fetch all stored values', function () {
 
 test('config can handle scenario where Config facade is unavailable', function () {
     $original = FacadesConfig::getFacadeRoot();
-    $faked = new class () extends \Illuminate\Config\Repository
+    $faked = new class() extends \Illuminate\Config\Repository
     {
         public function has($key)
         {
