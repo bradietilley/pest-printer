@@ -21,17 +21,17 @@ class Config
 
     public static function read(): void
     {
-        try {
-            /**
-             * Try read from Laravel's Config facade, however there's an
-             * issue when this is run after tearDown when a test is sent
-             * to the printer where `Target class [config] does not exist`
-             *
-             * To bypass this, we'll offer Laravel a chance and fallback
-             * to the good ol' `require` approach. SSDD right?
-             */
+        /**
+         * Try read from Laravel's Config facade, however there's an
+         * issue when this is run after tearDown when a test is sent
+         * to the printer where `Target class [config] does not exist`
+         *
+         * To bypass this, we'll offer Laravel a chance and fallback
+         * to the good ol' `require` approach. SSDD right?
+         */
+        if (self::facadeAvailable()) {
             self::$config = (array) Setting::get(self::CONFIG_KEY, []);
-        } catch (Throwable $error) {
+        } else {
             self::$config = (array) require __DIR__.'/../config/config.php';
         }
     }
@@ -44,6 +44,10 @@ class Config
         }
     }
 
+    /**
+     * Get all configuration currently in Laravel Config
+     * or locally stored here.
+     */
     public static function all(): array
     {
         self::init();
@@ -58,6 +62,9 @@ class Config
         return (array) self::$config;
     }
 
+    /**
+     * Get a given configuration value by its key
+     */
     public static function get(string $key, mixed $default = null): mixed
     {
         self::init();
@@ -72,6 +79,13 @@ class Config
         return Arr::get($all, $key, $default);
     }
 
+    /**
+     * Determine if the Config facade can be used
+     * 
+     * setUp: no (facade root not set)
+     * during: yes
+     * tearDown: no (facade root unset)
+     */
     public static function facadeAvailable(): bool
     {
         try {
@@ -82,7 +96,7 @@ class Config
     }
 
     /**
-     * Get the provided key from the config repository.
+     * Set the provided configuration in the repository.
      */
     public static function set(string $key, mixed $value = null): void
     {

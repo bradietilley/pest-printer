@@ -3,6 +3,7 @@
 use BradieTilley\PestPrinter\Config;
 use BradieTilley\PestPrinter\Exceptions\InvalidConfigurationException;
 use BradieTilley\PestPrinter\Objects\Status;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config as FacadesConfig;
 
 beforeEach(function () {
@@ -87,6 +88,68 @@ test('config will NOT throw InvalidConfigurationException on expected float bein
     } catch (Throwable $e) {
         $this->fail();
     }
+});
+
+test('config can fetch all stored values', function () {
+    $all = Config::all();
+    expect($all)->toHaveKeys([
+        'display',
+        'statuses',
+    ]);
+
+    expect(Arr::get($all, 'display.color.safeMode'))->toBe(false);
+
+    Config::set('display.color.safeMode', true);
+
+    $all = Config::all();
+    expect(Arr::get($all, 'display.color.safeMode'))->toBe(true);
+});
+
+test('config can handle scenario where Config facade is unavailable', function () {
+    $original = FacadesConfig::getFacadeRoot();
+    $faked = new class () extends \Illuminate\Config\Repository
+    {
+        public function has($key)
+        {
+            throw new \Exception('Whoops, facade root has not been set, mate');
+        }
+    };
+
+    // Default behaviour works (both local and laravel config set)
+    Config::set('display.datasetIndentation.text', '-->');
+    expect(Config::getDatasetIndentText())->toBe('-->');
+
+    // All includes changes
+    $all = Config::all();
+    expect(Arr::get($all, 'display.datasetIndentation.text'))->toBe('-->');
+
+    // Now simulate the test tearDown (from here onwards, the facade root is not set)
+    FacadesConfig::swap($faked);
+
+    // Default behaviour works (only local config set)
+    Config::set('display.datasetIndentation.text', '==>');
+    expect(Config::getDatasetIndentText())->toBe('==>');
+
+    // All includes changes
+    $all = Config::all();
+    expect(Arr::get($all, 'display.datasetIndentation.text'))->toBe('==>');
+
+    // Core configuration should be referenced in config if re-read
+    Config::read();
+
+    // All includes core configuration
+    $all = Config::all();
+    expect(Arr::get($all, 'display.datasetIndentation.text'))->toBe('>>>>');
+
+    // Now simulate a new test setUp (from here onwards, the facade root has been set)
+    FacadesConfig::swap($original);
+
+    // Expect the original Laravel configuraiton value to be fetched (in a real scenario this would be fresh from the config)
+    expect(Config::getDatasetIndentText())->toBe('-->');
+
+    // All includes original Laravel config
+    $all = Config::all();
+    expect(Arr::get($all, 'display.datasetIndentation.text'))->toBe('-->');
 });
 
 $testGetters = [
