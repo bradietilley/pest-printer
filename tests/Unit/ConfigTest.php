@@ -38,7 +38,7 @@ test('laravel config repository can get a value', function () {
     expect($value)->toBe('original');
 });
 
-test('config will throw InvalidConfigurationException on invalid string', function () {
+test('config will throw InvalidConfigurationException on expected string being array', function () {
     try {
         Config::set('display.statusMessage.text', []);
     } catch (Throwable $e) {
@@ -48,7 +48,7 @@ test('config will throw InvalidConfigurationException on invalid string', functi
     Config::getStatusMessageText();
 })->throws(InvalidConfigurationException::class, 'Invalid configuration value `display.statusMessage.text`, expected string but found array.');
 
-test('config will throw InvalidConfigurationException on invalid integer', function () {
+test('config will throw InvalidConfigurationException on expected integer being string', function () {
     try {
         Config::set('display.datasetIndentation.spacing', '5');
     } catch (Throwable $e) {
@@ -58,7 +58,7 @@ test('config will throw InvalidConfigurationException on invalid integer', funct
     Config::getDatasetIndentSpacing();
 })->throws(InvalidConfigurationException::class, 'Invalid configuration value `display.datasetIndentation.spacing`, expected integer but found string.');
 
-test('config will throw InvalidConfigurationException on invalid float', function () {
+test('config will throw InvalidConfigurationException on expected float being string', function () {
     try {
         Config::set('timing.grades.fast.time', '5.5');
     } catch (Throwable $e) {
@@ -68,7 +68,7 @@ test('config will throw InvalidConfigurationException on invalid float', functio
     Config::getTimeGradeFastTime();
 })->throws(InvalidConfigurationException::class, 'Invalid configuration value `timing.grades.fast.time`, expected float but found string.');
 
-test('config will throw InvalidConfigurationException on invalid boolean', function () {
+test('config will throw InvalidConfigurationException on expected boolean being integer', function () {
     try {
         Config::set('display.color.safeMode', 1);
     } catch (Throwable $e) {
@@ -77,6 +77,17 @@ test('config will throw InvalidConfigurationException on invalid boolean', funct
 
     Config::getSafeColorMode();
 })->throws(InvalidConfigurationException::class, 'Invalid configuration value `display.color.safeMode`, expected boolean but found integer.');
+
+test('config will NOT throw InvalidConfigurationException on expected float being integer', function () {
+    try {
+        Config::set('timing.grades.fast.time', 5);
+        Config::getTimeGradeFastTime();
+
+        expect(true)->toBeTrue();
+    } catch (Throwable $e) {
+        $this->fail();
+    }
+});
 
 $testGetters = [
     'getDelimiterText' => [

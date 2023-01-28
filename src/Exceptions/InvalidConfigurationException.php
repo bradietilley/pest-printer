@@ -62,7 +62,7 @@ class InvalidConfigurationException extends Exception
         return match (true) {
             is_string($value) => 'string',
             is_float($value) => 'float',
-            is_integer($value) => 'integer',
+            is_int($value) => 'integer',
             is_array($value) => 'array',
             is_object($value) => 'object',
             is_resource($value) => 'resource',
