@@ -1,8 +1,8 @@
 <?php
 
-namespace BradieTilley\Objects;
+namespace BradieTilley\PestPrinter\Objects;
 
-use BradieTilley\PestPrinterConfig;
+use BradieTilley\PestPrinter\Config;
 
 enum Status: string
 {
@@ -18,77 +18,42 @@ enum Status: string
 
     public function icon(): string
     {
-        return match ($this) {
-            self::PENDING => 'P',
-            self::SUCCESS => '✓',
-            self::FAILED => '✗',
-            self::WARNING => '!',
-            self::ERROR => 'E',
-            self::SKIPPED => 'S',
-            self::INCOMPLETE => 'I',
-            self::RISKY => 'R',
-            self::UNKNOWN => '?',
-        };
+        return Config::getStatusIcon($this);
     }
 
     public function showStatusMessageInline(): bool
     {
-        return match ($this) {
-            self::PENDING => false,
-            self::SUCCESS => false,
-            self::FAILED => false,
-            self::ERROR => false,
-            self::WARNING => true,
-            self::SKIPPED => true,
-            self::INCOMPLETE => true,
-            self::RISKY => true,
-            self::UNKNOWN => true,
-        };
+        return Config::getStatusShowMessageInline($this);
     }
 
     public function css(): string
     {
-        return PestPrinterConfig::color("text-{$this->color()}");
+        return Config::getStatusPrimaryCss($this);
     }
 
     public function inverseCss(): string
     {
-        return PestPrinterConfig::color("bg-{$this->color()}-700") . ' text-white';
+        return Config::getStatusInverseCss($this);
     }
 
     public function color(): string
     {
-        return PestPrinterConfig::statusColor($this->value, 'grey');
+        return Config::getStatusColor($this);
     }
 
     public function textPast(): string
     {
-        return match ($this) {
-            self::SUCCESS => 'Passed',
-            self::FAILED => 'Failed',
-            self::ERROR => 'Errored',
-            self::PENDING => 'Pending',
-            self::WARNING => 'Warned',
-            self::SKIPPED => 'Skipped',
-            self::INCOMPLETE => 'Incompleted',
-            self::RISKY => 'Risky',
-            self::UNKNOWN => 'Unknown',
-        };
+        return Config::getStatusTextPastTense($this);
     }
 
     public function text(): string
     {
-        return match ($this) {
-            self::SUCCESS => 'Pass',
-            self::FAILED => 'Failure',
-            self::ERROR => 'Error',
-            self::PENDING => 'Pending',
-            self::WARNING => 'Warning',
-            self::SKIPPED => 'Skip',
-            self::INCOMPLETE => 'Incomplete',
-            self::RISKY => 'Risky',
-            self::UNKNOWN => 'Unknown',
-        };
+        return Config::getStatusTextPresentTense($this);
+    }
+
+    public function showAdditionalInformation(): bool
+    {
+        return Config::getStatusShowAdditionalInformation($this);
     }
 
     public function group(): self
@@ -107,7 +72,7 @@ enum Status: string
     }
 
     /**
-     * @param array<Status> $statuses
+     * @param  array<Status>  $statuses
      * @return Status
      */
     public static function getLowestDemoninator(array $statuses): self
@@ -135,11 +100,6 @@ enum Status: string
 
     public function pluralTerm(): string
     {
-        return match ($this) {
-            self::FAILED => 'Failures',
-            self::WARNING => 'Warnings',
-            self::SUCCESS => 'Successes',
-            default => 'Unknowns',
-        };
+        return Config::getStatusTextPluralTerm($this);
     }
 }

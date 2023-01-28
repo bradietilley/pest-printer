@@ -8,9 +8,21 @@
         "nunomaduro/termwind": "^1.13",
         "illuminate/support": "^9.0"
     },
+    "require-dev": {
+        "pestphp/pest": "^1.22",
+        "orchestra/testbench": "^7.19",
+        "symfony/var-dumper": "^6.1.5",
+        "laravel/pint": "^1.4",
+        "phpstan/phpstan": "^1.8"
+    },
     "autoload": {
         "psr-4": {
-            "BradieTilley\\": "src/"
+            "BradieTilley\\PestPrinter\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
         }
     },
     "authors": [
@@ -23,6 +35,13 @@
     "config": {
         "allow-plugins": {
             "pestphp/pest-plugin": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "BradieTilley\\PestPrinter\\PestPrinterServiceProvider"
+            ]
         }
     }
 }

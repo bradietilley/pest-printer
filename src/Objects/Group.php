@@ -1,17 +1,16 @@
 <?php
 
-namespace BradieTilley\Objects;
+namespace BradieTilley\PestPrinter\Objects;
 
-use BradieTilley\PestPrinterConfig;
-use BradieTilley\Renderer;
+use BradieTilley\PestPrinter\Config;
+use BradieTilley\PestPrinter\Renderer;
 use Illuminate\Support\Collection;
-use PHPUnit\Framework\TestSuite;
 use Illuminate\Support\Str;
-use function Termwind\{render};
+use PHPUnit\Framework\TestSuite;
 
 class Group
 {
-    /** @var Collection<Single> */
+    /** @var Collection<int, Single> */
     protected Collection $tests;
 
     protected ?string $lastTest = null;
@@ -50,6 +49,9 @@ class Group
         return $this->lastTest;
     }
 
+    /**
+     * @return Collection<int, Single>
+     */
     public function tests(): Collection
     {
         return $this->tests;
@@ -87,7 +89,7 @@ class Group
         $this->running = true;
 
         $title = $this->getName();
-        $gray = PestPrinterConfig::color('bg-gray-800');
+        $gray = Config::getTestNameClass();
 
         Renderer::render(<<<HTML
             <div class="pl-2 py-1">

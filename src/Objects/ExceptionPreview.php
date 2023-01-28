@@ -1,13 +1,12 @@
 <?php
 
-namespace BradieTilley\Objects;
+namespace BradieTilley\PestPrinter\Objects;
 
-use BradieTilley\PestPrinterConfig;
-use BradieTilley\Renderer;
+use BradieTilley\PestPrinter\Config;
+use BradieTilley\PestPrinter\Renderer;
 use PHPUnit\Framework\ExceptionWrapper;
 use PHPUnit\Framework\ExpectationFailedException;
 use Throwable;
-use function Termwind\{render};
 
 class ExceptionPreview
 {
@@ -22,7 +21,7 @@ class ExceptionPreview
 
     public function readFile(): string
     {
-        return @file_get_contents($this->exception->getFile()) ?? '';
+        return @file_get_contents($this->exception->getFile()) ?: '';
     }
 
     public function extractLines(int $from, int $to, string $file): array
@@ -32,6 +31,11 @@ class ExceptionPreview
         }
 
         $handler = fopen($file, 'r');
+
+        if (! $handler) {
+            throw new \Exception('Failed to read file '.$file);
+        }
+
         $row = 0;
         $rows = [];
 
@@ -60,8 +64,9 @@ class ExceptionPreview
     public function findTraceThatIsNotPhpUnitOrPest(): ?array
     {
         foreach ($this->exception->getTrace() as $trace) {
+            /** @var array<string, mixed> $trace */
             $file = $trace['file'];
-
+            /** @var string $file */
             if (str_contains($file, '/vendor/phpunit/phpunit/') || str_contains($file, '/vendor/pestphp/pest/')) {
                 continue;
             }
@@ -75,12 +80,12 @@ class ExceptionPreview
     public function getFriendlyClassName(): string
     {
         $class = get_class($this->exception);
-        
+
         if ($this->exception instanceof ExpectationFailedException) {
             $class = $this->exception->getComparisonFailure() ?? $this->exception;
             $class = get_class($class);
         }
-        
+
         if ($this->exception instanceof ExceptionWrapper) {
             $class = $this->exception->getClassName();
         }
@@ -101,9 +106,9 @@ class ExceptionPreview
             '>' => '&gt;',
         ];
 
-        $rows = array_map(fn ($lineText) => rtrim($lineText, "\n\r") . "&nbsp;", $rows);
+        $rows = array_map(fn ($lineText) => rtrim($lineText, "\n\r").'&nbsp;', $rows);
         $lines = implode(PHP_EOL, $rows);
-        $lines = str_replace(array_keys($safeDisplay), array_values($safeDisplay), $lines);;
+        $lines = str_replace(array_keys($safeDisplay), array_values($safeDisplay), $lines);
 
         return $lines;
     }
@@ -117,7 +122,7 @@ class ExceptionPreview
 
         // Extract about 10 rows of code with the affected line in the middle
         $rows = $this->extractAroundLine($line, $file);
-        
+
         // Determine the first line of the code snippet
         $firstLine = array_key_first($rows);
 
@@ -128,8 +133,7 @@ class ExceptionPreview
         $class = $this->getFriendlyClassName();
 
         $typeClass = $type ? 'flex' : 'hidden';
-        $cyan = PestPrinterConfig::color('text-cyan-400');
-        $gray = PestPrinterConfig::color('text-gray-700');
+        $gray = Config::getExceptionPreviewLabelClass();
 
         $html = <<<HTML
         <div class="pl-{$indent}">
@@ -148,7 +152,7 @@ class ExceptionPreview
                 <span class="ml-1">{$this->exception->getLine()}</span>
             </div>
 
-            <code line="{$line}" start-line="{$firstLine}" class="{$cyan}">
+            <code line="{$line}" start-line="{$firstLine}">
             {$lines}
             </code>
         </div>

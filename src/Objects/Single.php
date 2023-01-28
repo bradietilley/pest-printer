@@ -1,19 +1,18 @@
 <?php
 
-namespace BradieTilley\Objects;
+namespace BradieTilley\PestPrinter\Objects;
 
 use AssertionError;
-use BradieTilley\PestPrinterConfig;
-use BradieTilley\Printer;
-use BradieTilley\Renderer;
+use BradieTilley\PestPrinter\Config;
+use BradieTilley\PestPrinter\Printer;
+use BradieTilley\PestPrinter\Renderer;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\IncompleteTestError;
 use PHPUnit\Framework\SkippedTestError;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Warning;
-use SebastianBergmann\Invoker\TimeoutException;
+use function Termwind\terminal;
 use Throwable;
-use function Termwind\{render, terminal};
 
 class Single
 {
@@ -89,17 +88,16 @@ class Single
         $name = $this->getName();
 
         $indexText = "[{$this->suiteIndex}/{$this->suiteMax}]";
-        $indexCss = PestPrinterConfig::color('text-zinc-600');
-        $cyan = PestPrinterConfig::color('text-cyan-600');
-        $gray = PestPrinterConfig::color('text-gray-600');
+        $indexCss = Config::getTestIndexClass();
+        $elipsisCss = Config::getTestNameElipsisClass();
 
         $widths = [
-            'left' => 2,
-            'index' => 9,
-            'right' => 2,
-            'padding' => 1,
-            'status' => 2,
-            'time' => 7,
+            'left' => Config::getWidthLeft(),
+            'index' => Config::getWidthIndex(),
+            'right' => Config::getWidthRight(),
+            'padding' => Config::getWidthPadding(),
+            'status' => Config::getWidthStatus(),
+            'time' => Config::getWidthTime(),
         ];
 
         $otherWidth = $widths['left']
@@ -119,6 +117,7 @@ class Single
          * array (capped at the expected width of the name column)
          */
         $text = [];
+        assert($nameWidth > 0);
         foreach (mb_str_split($name, $nameWidth) as $line) {
             $text[] = <<<HTML
                 <div>{$line}</div>
@@ -130,28 +129,39 @@ class Single
                 $text = [];
             }
 
-            $spacing = 1;
-            $indent = '>>>>';
+            $indent = Config::getDatasetIndentText();
+            $spacing = Config::getDatasetIndentSpacing();
+            $indentCss = Config::getDatasetIndentClass();
+
+            $datasetCss = Config::getDatasetNameClass();
+
             $restrictedWidth = strlen($indent) + $spacing;
 
-            $dataset = mb_str_split($this->getDataset(), $nameWidth - $restrictedWidth);
+            $nameMinusRestrictedWidth = $nameWidth - $restrictedWidth;
+
+            assert($nameMinusRestrictedWidth > 0);
+            $dataset = mb_str_split((string) $this->getDataset(), $nameMinusRestrictedWidth);
 
             foreach ($dataset as $datasetpart) {
                 $text[] = <<<HTML
-                    <span class="{$cyan} mr-{$spacing}">{$indent}</span>
-                    <span class="{$cyan}">{$datasetpart}</span>
+                    <span class="{$indentCss} mr-{$spacing}">{$indent}</span>
+                    <span class="{$datasetCss}">{$datasetpart}</span>
                 HTML;
             }
         }
 
         $statusMessage = htmlspecialchars(trim(trim($this->test->getStatusMessage()), '.'));
         if (strlen($statusMessage) > 0 && $this->status->showStatusMessageInline()) {
-            $spacing = 1;
-            $indent = '⟶  ';
+            $spacing = Config::getStatusMessageSpacing();
+            $indent = Config::getStatusMessageText();
+
             $indentWidth = mb_strlen($indent);
             $restrictedWidth = $indentWidth + $spacing;
             $maxLines = 4;
-            $statusMessage = mb_str_split($statusMessage, $nameWidth - $restrictedWidth);
+            $nameMinusRestrictedWidth = $nameWidth - $restrictedWidth;
+
+            assert($nameMinusRestrictedWidth > 0);
+            $statusMessage = mb_str_split($statusMessage, $nameMinusRestrictedWidth);
 
             if (count($statusMessage) > $maxLines) {
                 $statusMessage = array_slice($statusMessage, 0, $maxLines);
@@ -159,7 +169,7 @@ class Single
 
                 $truncate = ' (truncated)';
 
-                $statusMessage[$last] = substr($statusMessage[$last], 0, 0 - strlen($truncate)) . $truncate;
+                $statusMessage[$last] = substr($statusMessage[$last], 0, 0 - strlen($truncate)).$truncate;
             }
 
             foreach ($statusMessage as $statusmessagepart) {
@@ -177,7 +187,7 @@ class Single
         $status = [
             $statusIcon,
         ];
-        $symbol = '↳';
+        $symbol = Config::getRowPrefixText();
         while (count($status) < count($text)) {
             $status[] = <<<HTML
             <div class="{$statusCss}">{$symbol}</div>
@@ -191,10 +201,11 @@ class Single
         $time = [
             $timeText,
         ];
-        $symbol = '↲';
+        $symbol = Config::getRowSuffixText();
+        $symbolCss = Config::getRowSuffixClass();
         while (count($time) < count($text)) {
             $time[] = <<<HTML
-            <div class="{$gray}">{$symbol}</div>
+            <div class="{$symbolCss}">{$symbol}</div>
             HTML;
         }
 
@@ -206,25 +217,14 @@ class Single
             $indexText,
         ];
         $symbol = '';
+        $symbolCss = '';
         while (count($index) < count($text)) {
             $index[] = <<<HTML
-            <div class="{$gray}">{$symbol}</div>
+            <div class="{$symbolCss}">{$symbol}</div>
             HTML;
         }
 
-        // foreach ($text as $textIndex => $textRow) {
-        //     $diff = $nameWidth - (strlen($textRow) + 1);
-
-        //     if ($diff > 0) {
-        //         $dots = str_repeat('.', $diff);
-
-        //         $textRow .= <<<HTML
-        //             <span class="{$gray}">{$dots}</span>
-        //         HTML;
-        //     }
-
-        //     $text[$textIndex] = $textRow;
-        // }
+        $elipsis = Config::getTestNameElipsisText();
 
         foreach (array_keys($text) as $row) {
             Renderer::render(<<<HTML
@@ -240,7 +240,7 @@ class Single
                     <span class="w-{$nameWidth} max-w-{$nameWidth} truncate">
                         <div class="flex">
                             <div class="w-auto">{$text[$row]}</div>
-                            <span class="w-auto pl-1 {$gray} content-repeat-['.']"></span>
+                            <span class="w-auto pl-1 {$elipsisCss} content-repeat-['{$elipsis}']"></span>
                         </div>
                     </span>
 
@@ -286,7 +286,7 @@ class Single
 
     public function showAdditionalInformation(): bool
     {
-        return $this->status->group() !== Status::SUCCESS;
+        return $this->status->showAdditionalInformation();
     }
 
     public function renderAdditionalInformation(array &$issues): void
@@ -300,7 +300,6 @@ class Single
 
         Printer::delimiter();
 
-
         Renderer::render(<<<HTML
             <div class="pt-1 px-2">
                 <div class="{$inverseStatusCss} px-1">{$issueTerm} #{$issueNumber}</div>
@@ -312,23 +311,30 @@ class Single
         $dataset = $this->getDataset();
         $datasetclass = $this->name->hasDataset() ? '' : 'hidden';
 
+        $icon1 = Config::getFailedTestDelimiter1Text();
+        $icon2 = Config::getFailedTestDelimiter2Text();
+        $icon3 = Config::getFailedTestDelimiter3Text();
+        $iconCss = Config::getFailedTestDelimiterClass();
+
         Renderer::render(<<<HTML
         <div class="pl-2 pt-1">
             <div class="flex">
-                • <span class="{$statusCss}">{$file}</span>
-                » <span class="{$statusCss}">{$name}</span>
-                <span class="{$datasetclass} ml-1"> › <span class="{$statusCss}">{$dataset}</span></span>
+                <span class="{$iconCss}">{$icon1}</span> <span class="{$statusCss}">{$file}</span>
+                <span class="pl-1 {$iconCss}">{$icon2}</span> <span class="{$statusCss}">{$name}</span>
+                <span class="{$datasetclass} ml-1"> <span class="{$iconCss}">{$icon3}</span> <span class="{$statusCss}">{$dataset}</span></span>
             </div>
         </div>
         HTML);
 
         $exception = null;
         if ($this->hasException() && $this->shouldShowExceptionPreview()) {
-            $exception = ExceptionPreview::make($this->error);
+            $error = $this->error;
+
+            assert($error !== null);
+            $exception = ExceptionPreview::make($error);
 
             $exception->renderType(indent: 2);
         }
-
 
         $statusMessage = trim($this->test->getStatusMessage());
 
