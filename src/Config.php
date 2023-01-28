@@ -659,7 +659,7 @@ class Config
         $value = self::get($key, $default);
 
         if (! is_string($value)) {
-            throw InvalidConfigurationException::invalidString($key);
+            throw InvalidConfigurationException::invalidString($key, $value);
         }
 
         return $value;
@@ -673,7 +673,7 @@ class Config
         $value = self::get($key, $default);
 
         if (! is_bool($value)) {
-            throw InvalidConfigurationException::invalidBoolean($key);
+            throw InvalidConfigurationException::invalidBoolean($key, $value);
         }
 
         return $value;
@@ -687,7 +687,7 @@ class Config
         $value = self::get($key, $default);
 
         if (! is_int($value)) {
-            throw InvalidConfigurationException::invalidInteger($key);
+            throw InvalidConfigurationException::invalidInteger($key, $value);
         }
 
         return $value;
@@ -705,7 +705,7 @@ class Config
         }
 
         if (! is_float($value)) {
-            throw InvalidConfigurationException::invalidFloat($key);
+            throw InvalidConfigurationException::invalidFloat($key, $value);
         }
 
         return $value;

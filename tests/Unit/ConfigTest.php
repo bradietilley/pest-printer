@@ -46,7 +46,7 @@ test('config will throw InvalidConfigurationException on invalid string', functi
     }
 
     Config::getStatusMessageText();
-})->throws(InvalidConfigurationException::class, 'Invalid configuration value found for `display.statusMessage.text` (must be string)');
+})->throws(InvalidConfigurationException::class, 'Invalid configuration value `display.statusMessage.text`, expected string but found array.');
 
 test('config will throw InvalidConfigurationException on invalid integer', function () {
     try {
@@ -56,7 +56,7 @@ test('config will throw InvalidConfigurationException on invalid integer', funct
     }
 
     Config::getDatasetIndentSpacing();
-})->throws(InvalidConfigurationException::class, 'Invalid configuration value found for `display.datasetIndentation.spacing` (must be integer)');
+})->throws(InvalidConfigurationException::class, 'Invalid configuration value `display.datasetIndentation.spacing`, expected integer but found string.');
 
 test('config will throw InvalidConfigurationException on invalid float', function () {
     try {
@@ -66,7 +66,7 @@ test('config will throw InvalidConfigurationException on invalid float', functio
     }
 
     Config::getTimeGradeFastTime();
-})->throws(InvalidConfigurationException::class, 'Invalid configuration value found for `timing.grades.fast.time` (must be float)');
+})->throws(InvalidConfigurationException::class, 'Invalid configuration value `timing.grades.fast.time`, expected float but found string.');
 
 test('config will throw InvalidConfigurationException on invalid boolean', function () {
     try {
@@ -76,7 +76,7 @@ test('config will throw InvalidConfigurationException on invalid boolean', funct
     }
 
     Config::getSafeColorMode();
-})->throws(InvalidConfigurationException::class, 'Invalid configuration value found for `display.color.safeMode` (must be boolean)');
+})->throws(InvalidConfigurationException::class, 'Invalid configuration value `display.color.safeMode`, expected boolean but found integer.');
 
 $testGetters = [
     'getDelimiterText' => [
