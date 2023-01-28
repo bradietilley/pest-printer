@@ -12,7 +12,7 @@ class InvalidConfigurationException extends Exception
     public static function invalidString(string $key): self
     {
         return new self(sprintf(
-            'Invalid configuration value found for %s (must be string)',
+            'Invalid configuration value found for `%s` (must be string)',
             $key
         ));
     }
@@ -23,7 +23,7 @@ class InvalidConfigurationException extends Exception
     public static function invalidBoolean(string $key): self
     {
         return new self(sprintf(
-            'Invalid configuration value found for %s (must be boolean)',
+            'Invalid configuration value found for `%s` (must be boolean)',
             $key
         ));
     }
@@ -34,7 +34,7 @@ class InvalidConfigurationException extends Exception
     public static function invalidInteger(string $key): self
     {
         return new self(sprintf(
-            'Invalid configuration value found for %s (must be integer)',
+            'Invalid configuration value found for `%s` (must be integer)',
             $key
         ));
     }
@@ -45,7 +45,7 @@ class InvalidConfigurationException extends Exception
     public static function invalidFloat(string $key): self
     {
         return new self(sprintf(
-            'Invalid configuration value found for %s (must be float)',
+            'Invalid configuration value found for `%s` (must be float)',
             $key
         ));
     }

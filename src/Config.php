@@ -36,11 +36,23 @@ class Config
         }
     }
 
-    public static function all(): array
+    private static function init(): void
     {
         // Read the configuration once
         if (self::$config === null) {
             static::read();
+        }
+    }
+
+    public static function all(): array
+    {
+        self::init();
+
+        if (self::facadeAvailable()) {
+            /** @var array $settings */
+            $settings = Setting::get(self::CONFIG_KEY);
+
+            return $settings;
         }
 
         return (array) self::$config;
@@ -48,14 +60,39 @@ class Config
 
     public static function get(string $key, mixed $default = null): mixed
     {
-        // Read the configuration once
-        if (self::$config === null) {
-            static::read();
+        self::init();
+
+        if (self::facadeAvailable()) {
+            return Setting::get(self::CONFIG_KEY.'.'.$key, $default);
         }
 
-        $config = self::all();
+        /** @var array $all */
+        $all = self::$config;
 
-        return Arr::get($config, $key, $default);
+        return Arr::get($all, $key, $default);
+    }
+
+    public static function facadeAvailable(): bool
+    {
+        try {
+            return Setting::has(self::CONFIG_KEY);
+        } catch (Throwable $e) {
+            return false;
+        }
+    }
+
+    /**
+     * Get the provided key from the config repository.
+     */
+    public static function set(string $key, mixed $value = null): void
+    {
+        self::init();
+
+        if (self::facadeAvailable()) {
+            Setting::set(self::CONFIG_KEY.'.'.$key, $value);
+        }
+
+        Arr::set(self::$config, $key, $value);
     }
 
     /**
