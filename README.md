@@ -1,5 +1,7 @@
 # Pest Printer
 
+> For Pest 1.x only. Archived and read only now.
+
 A custom printer style for Laravel and PestPHP.
 
 ## Usage
